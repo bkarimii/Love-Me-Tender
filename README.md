@@ -1,7 +1,5 @@
 # Starter Kit
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
-
 - [x] Full stack ES8+ with [Babel]
 - [x] [Node] LTS support (verified working on 18.x and 20.x LTS releases)
 - [x] [Express] server
@@ -16,22 +14,11 @@
 - [x] [Docker] build
 - [x] [Postgres] database with [node-postgres]
 
-## Setup
+## Deployed Website on render
 
-> **Note** if you have _any problems_ setting up the starter kit, see the [wiki] and, if still not solved, post to
-> [`#cyf-full-stack-starter-kit` in Slack][2].
+This is our deployed website link https://love-me-tender-51qa.onrender.com
 
-Pick one member of the team to own the repository and pipeline. That person should do the following:
-
-1.  Click the "Use this template" button above (see [GitHub's docs][1]) to create your team repository and name it something appropriate for your project.
-    - Your repo should say _"generated from"_, **not** _"forked from"_, _"CodeYourFuture/cyf-final-project-starter-kit"_ at the top
-2.  In your repo, click the "Deploy to Render" button at the top of the README and log in using GitHub when prompted.
-3.  Fill in a service group name for your application and then click "Apply".
-4.  Once it has deployed successfully, click the "managed resources" link to view the application details.
-
-Whenever you commit to main (or e.g. merge a [pull request]) it will get automatically deployed!
-
-You should now make sure all of the project team are [collaborators] on the repository.
+The render is on auto-deploy so it should render new changes to the website.
 
 ## Scripts
 
