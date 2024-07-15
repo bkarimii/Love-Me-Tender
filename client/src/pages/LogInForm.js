@@ -93,6 +93,7 @@ function LogInForm(){
 						{passwordError && <span>{passwordError}</span>}
 						<button type="submit">Log In</button>
 					</form>
+                    <div><Link to={"/forgot-password"} >I forgot my password</Link></div>
 					<div>
 						<p>
 							Don&apos;t have an account? <Link to={"/signup"} >Sign Up </Link >
