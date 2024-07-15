@@ -30,12 +30,58 @@ function Bidder(){
 		return passwordRegex.test(password);
 	};
 
-    
+    //fetch function to post data to back-end
+    async function postBidderDeatils(userData) {
+			try {
+				const response = await fetch("/mock-api", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(userData),
+				});
+
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+
+				console.log("User signed up successfully!");
+				
+			} catch (error) {
+				console.error("Error during signup:", error);
+				
+			}
+		}
+
     const handleInputChange = (e) => {
 			const { name, value } = e.target;
 			setBidderDetails((prevDetails)=>({ ...prevDetails , [name]:value }));
 		};
 
+    const handleSubmit = (e) => {
+			const passwordsMatches =
+				bidderDetails.password === bidderDetails.confirmPassword;
+			if (
+				validateEmail(bidderDetails.email) &&
+				validatePassword(bidderDetails.password) &&
+				passwordsMatches
+			) {
+                setEmailError("");
+                setPasswordError("");
+                postBidderDeatils(bidderDetails);
+                console.log("successfully recorded");
+			}else{
+                if(!validateEmail(bidderDetails.email)){
+                    setEmailError("Enter a valid email address");
+                }else if(!validatePassword){
+                    setPasswordError(
+											"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+										);
+                }else if(!passwordsMatches){
+                    setPasswordError("passwords doesn't match!");
+                }
+            }
+		};
 
 	return (
 		<>
