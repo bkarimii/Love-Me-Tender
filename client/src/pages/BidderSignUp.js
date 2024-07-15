@@ -73,12 +73,15 @@ function Bidder(){
 			}else{
                 if(!validateEmail(bidderDetails.email)){
                     setEmailError("Enter a valid email address");
+                    console.log("Email not valid!");
                 }else if(!validatePassword){
                     setPasswordError(
 											"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
 										);
+                    console.log("password requirement error");
                 }else if(!passwordsMatches){
                     setPasswordError("passwords doesn't match!");
+                    console.log("password doesn't match");
                 }
             }
 		};
