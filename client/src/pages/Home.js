@@ -39,6 +39,9 @@ export function Home() {
 					<button>My Biddings</button>
 				</Link>
 				<Link to={"/signup"}>SignUp</Link>
+				<Link to="/login" className="login-link">
+					Login
+				</Link>
 			</div>
 		</main>
 	);
