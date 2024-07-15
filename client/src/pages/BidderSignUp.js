@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 
-function Bidder(){
+function BidderSignUp(){
 	const [bidderDetails, setBidderDetails] = useState({
 		userType: "bidder",
 		firstName: "",
@@ -88,7 +88,7 @@ function Bidder(){
 
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<div>
 					<label htmlFor="first-name">First Name:</label>
 					<input
@@ -160,3 +160,5 @@ function Bidder(){
 		</>
 	);
 }
+
+export default BidderSignUp ;
