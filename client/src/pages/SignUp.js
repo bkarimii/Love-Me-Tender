@@ -2,13 +2,16 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import BidderSignUp from "./BidderSignUp";
+import ContractorSignUp from "./ContractorSignUp";
 
 function SignUp(){
     //to keep track value of radio buttons
     const [userType , setUserType]=useState("");
 
-    //decides signup form to be shown or now
+    //decides signup form to be shown or not
     const [showForm , setShowForm]=useState(false);
+	// radio buttons to be shown or hidden
+	const [showRadioForm, setShowRadioForm] = useState(true);
     
     const handleSubmitUserType=(e)=>{
         e.preventDefault();
@@ -20,10 +23,17 @@ function SignUp(){
         setUserType(e.target.value);
     };
 
+	const handleBackButtonClick=()=>{
+		setShowForm(false);
+		setShowRadioForm(true); // to show radio buttons
+
+	};
+
     return (
 			<>
 				<div>
-					{!showForm && (
+					<div>{showForm && <button onClick={handleBackButtonClick}>Back</button>}</div>
+					{!showForm && showRadioForm && (
 						<form onSubmit={handleSubmitUserType}>
 							<p>I am a :</p>
 							<div>
@@ -51,6 +61,9 @@ function SignUp(){
 					)}
 				</div>
 				<div>{userType === "bidder" && showForm && <BidderSignUp />}</div>
+				<div>
+					{userType === "contractor" && showForm && <ContractorSignUp />}
+				</div>
 			</>
 		);
 }
