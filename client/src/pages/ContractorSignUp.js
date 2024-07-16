@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 function ContractorSignUp(){
 	const [contractorDetails, setContractorDetails] = useState({
+		userType:"contractor" ,
 		firstName: "",
 		lastName: "",
 		email: "",
@@ -76,23 +77,28 @@ function ContractorSignUp(){
 							validatePassword(contractorDetails.password) &&
 							contractorDetails.password === contractorDetails.confirmPassword
 						) {
+							// if condtions verified clears all the error variables
 							setEmailError("");
 							setPasswordError("");
 							setPasswordMatches(true);
+							//send a fetch post to the server
 							postContractorDeatils(contractorDetails);
 							console.log("successfully recorded");
 						} else {
+							//if one of conditions doesn't satisfied
+							//if email is not valid
 							if (!validateEmail(contractorDetails.email)) {
 								setEmailError("Enter a valid email address");
 								console.log("Email not valid!");
+								//if password is not valid
 							} else if (!validatePassword) {
 								setPasswordError(
 									"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
 								);
 								console.log("password requirement error");
-							} else if (!passwordMatches) {
+								
+							} else if (!passwordMatches) { // if passwords doesn't match
 								setPasswordMatches(false);
-								// setPasswordError("passwords doesn't match!");
 								console.log("password doesn't match");
 							}else{
 								console.log("An error happened!");
