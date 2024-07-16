@@ -94,6 +94,8 @@ function ContractorSignUp(){
 								setPasswordMatches(false);
 								// setPasswordError("passwords doesn't match!");
 								console.log("password doesn't match");
+							}else{
+								console.log("An error happened!");
 							}
 						}
         };
@@ -103,6 +105,43 @@ function ContractorSignUp(){
 			<div>
 				<form onSubmit={handleSubmit}>
 					<div>
+						<label htmlFor="first-name">First Name:</label>
+						<input
+							type="text"
+							id="first-name"
+							name="firstName"
+							placeholder="Enter your first name"
+							value={contractorDetails.firstName}
+							onChange={handleInputChange}
+							required
+						/>
+					</div>
+					<div>
+						<label htmlFor="last-name">Last Name:</label>
+						<input
+							type="text"
+							id="last-name"
+							name="lastName"
+							placeholder="Enter your last name"
+							value={contractorDetails.lastName}
+							onChange={handleInputChange}
+							required
+						/>
+					</div>
+					<div>
+						<label htmlFor="email">Email:</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							placeholder="Enter your email address"
+							value={contractorDetails.email}
+							onChange={handleInputChange}
+							required
+						/>
+						{emailError && <p>{emailError}</p>}
+					</div>
+					<div>
 						<label htmlFor="company">Company:</label>
 						<input
 							type="text"
@@ -111,7 +150,6 @@ function ContractorSignUp(){
 							placeholder="Enter your company name"
 							value={contractorDetails.company}
 							onChange={handleInputChange}
-							required
 						/>
 					</div>
 					<div>
@@ -123,8 +161,33 @@ function ContractorSignUp(){
 							placeholder="Enter your address"
 							value={contractorDetails.address}
 							onChange={handleInputChange}
+						/>
+					</div>
+					<div>
+						<label htmlFor="password">Password:</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							placeholder="Enter your password"
+							value={contractorDetails.password}
+							onChange={handleInputChange}
 							required
 						/>
+						{passwordError && <p>{passwordError}</p>}
+					</div>
+					<div>
+						<label htmlFor="confirm-password">Confirm Password:</label>
+						<input
+							type="password"
+							id="confirm-password"
+							name="confirmPassword"
+							placeholder="Confirm your password"
+							value={contractorDetails.confirmPassword}
+							onChange={handleInputChange}
+							required
+						/>
+						{!passwordMatches && <p>Password does not match !</p>}
 					</div>
 					<button type="submit">Submit</button>
 				</form>
