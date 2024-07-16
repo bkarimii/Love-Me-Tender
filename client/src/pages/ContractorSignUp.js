@@ -29,19 +29,44 @@ function ContractorSignUp(){
 		return emailRegex.test(email);
 	};
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setContractorDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-		// Check password validity on change
-		if (name === "password") {
-			const isValid = validatePassword(value);
-			setPasswordError(
-				isValid
-					? ""
-					: "Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
-			);
+	//fetch function to post data to back-end
+	async function postContractorDeatils(userData) {
+		try {
+			const response = await fetch("/mock-api", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(userData),
+			});
+
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
+
+			console.log("User signed up successfully!");
+		} catch (error) {
+			console.error("Error during signup:", error);
 		}
-	};
+	}
+
+    const handleInputChange = (e) => {
+			const { name, value } = e.target;
+			setContractorDetails((prevDetails) => ({
+				...prevDetails,
+				[name]: value,
+			}));
+			// Check password validity on change
+			if (name === "password") {
+				const isValid = validatePassword(value);
+				setPasswordError(
+					isValid
+						? ""
+						: "Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+				);
+			}
+		};
+
 
 	return (
 		<>
