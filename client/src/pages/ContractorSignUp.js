@@ -14,6 +14,8 @@ function ContractorSignUp(){
 	const [passwordError, setPasswordError] = useState("");
     const [emailError , setEmailError]=useState("");
     const [passwordMatches, setPasswordMatches] = useState(true);
+	// This variable tracks the message comes back from server after posting users details
+	const [backEndMessage , setBackendMessage]=useState("");
 
 	// Check if password has the requirements
 	const validatePassword = (password) => {
@@ -40,13 +42,17 @@ function ContractorSignUp(){
 				},
 				body: JSON.stringify(userData),
 			});
+			const data=await response.json();
 
 			if (!response.ok) {
+				setBackendMessage(data.message || "Something went wrong!");
 				throw new Error("Network response was not ok");
+			}else{
+				setBackendMessage(
+					data.message || "Signed up successfully ! please check your emailinbox for activation email.");
 			}
-
-			console.log("User signed up successfully!");
 		} catch (error) {
+			setBackendMessage(error.message);
 			console.error("Error during signup:", error);
 		}
 	}
@@ -194,6 +200,7 @@ function ContractorSignUp(){
 					</div>
 					<button type="submit">Submit</button>
 				</form>
+				{backEndMessage && <p>{backEndMessage}</p>}
 			</div>
 		</>
 	);
