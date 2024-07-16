@@ -14,6 +14,7 @@ function BidderSignUp(){
 	});
     const [emailError , setEmailError]=useState("");
     const [passwordError , setPasswordError]=useState("");
+    const [passwordMatches , setPasswordMatches]=useState(false);
 
 	// This function checks if inputed email is valid
 	const validateEmail = (email) => {
@@ -25,8 +26,7 @@ function BidderSignUp(){
     // check if password has the requirements
 	const validatePassword = (password) => {
 		// regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
-		const passwordRegex =
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 		return passwordRegex.test(password);
 	};
 
@@ -55,35 +55,43 @@ function BidderSignUp(){
 
     const handleInputChange = (e) => {
 			const { name, value } = e.target;
-			setBidderDetails((prevDetails)=>({ ...prevDetails , [name]:value }));
+			setBidderDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+			// Check password validity on change
+			if (name === "password") {
+				const isValid = validatePassword(value);
+				setPasswordError(isValid ? "" : "Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+					);
+			}
 		};
-
+        const passwordsMatches = bidderDetails.password === bidderDetails.confirmPassword;
+			
     const handleSubmit = (e) => {
-			const passwordsMatches =
-				bidderDetails.password === bidderDetails.confirmPassword;
+        e.preventDefault();
 			if (
 				validateEmail(bidderDetails.email) &&
 				validatePassword(bidderDetails.password) &&
-				passwordsMatches
+				bidderDetails.password === bidderDetails.confirmPassword
 			) {
-                setEmailError("");
-                setPasswordError("");
-                postBidderDeatils(bidderDetails);
-                console.log("successfully recorded");
-			}else{
-                if(!validateEmail(bidderDetails.email)){
-                    setEmailError("Enter a valid email address");
-                    console.log("Email not valid!");
-                }else if(!validatePassword){
-                    setPasswordError(
-											"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
-										);
-                    console.log("password requirement error");
-                }else if(!passwordsMatches){
-                    setPasswordError("passwords doesn't match!");
-                    console.log("password doesn't match");
-                }
-            }
+				setEmailError("");
+				setPasswordError("");
+                setPasswordMatches(true);
+				postBidderDeatils(bidderDetails);
+				console.log("successfully recorded");
+			} else {
+				if (!validateEmail(bidderDetails.email)) {
+					setEmailError("Enter a valid email address");
+					console.log("Email not valid!");
+				} else if (!validatePassword) {
+					setPasswordError(
+						"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+					);
+					console.log("password requirement error");
+				} else if (!passwordsMatches) {
+                    setPasswordMatches(false);
+					// setPasswordError("passwords doesn't match!");
+					console.log("password doesn't match");
+				}
+			}
 		};
 
 	return (
@@ -136,6 +144,7 @@ function BidderSignUp(){
 						onChange={handleInputChange}
 						required
 					/>
+					{emailError && <p>{emailError}</p>}
 				</div>
 				<div>
 					<label htmlFor="password">Password:</label>
@@ -148,6 +157,7 @@ function BidderSignUp(){
 						onChange={handleInputChange}
 						required
 					/>
+					{passwordError && <p>{passwordError}</p>}
 				</div>
 				<div>
 					<label htmlFor="confirm-password">Confirm Password:</label>
@@ -160,6 +170,7 @@ function BidderSignUp(){
 						onChange={handleInputChange}
 						required
 					/>
+					{!passwordsMatches && <p>Password does not match !</p>}
 				</div>
 				<button type="submit">Submit</button>
 			</form>
