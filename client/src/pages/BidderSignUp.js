@@ -179,3 +179,5 @@ function BidderSignUp(){
 }
 
 export default BidderSignUp ;
+
+//signup in branch signup-front-end
