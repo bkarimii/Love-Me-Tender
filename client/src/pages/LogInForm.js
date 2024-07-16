@@ -1,22 +1,16 @@
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function LogInForm(){
     const [emailInput , setEmailInput]=useState("");
     const [passwordInput , setPasswordInput]=useState("") ;
-    const [emailError , setEmailError]=useState("") ;
-    const [passwordError , setPasswordError]=useState("");
-    
-
-    //record changes for email address input
+    //Record changes for email address input
     const handleEmailChange = (e) => {
-			const email = e.target.value; 
-			setEmailInput(email); 
+			const email = e.target.value;
+			setEmailInput(email);
 		};
 
-    //record changes on password input
+    //Record changes on password input
     const handlePasswordChange=(e)=>{
         const password=e.target.value;
         setPasswordInput(password);
@@ -47,7 +41,6 @@ function LogInForm(){
 
 
 			postLogInDeatils(logInData);
-			
 		};
 
     return (
@@ -63,7 +56,6 @@ function LogInForm(){
 							onChange={handleEmailChange}
 							required
 						/>
-						{emailError && <span>{emailError}</span>}
 						<label htmlFor="password">Password:</label>
 						<input
 							type="password"
@@ -73,7 +65,6 @@ function LogInForm(){
 							onChange={handlePasswordChange}
 							required
 						/>
-						{passwordError && <span>{passwordError}</span>}
 						<button type="submit">Log In</button>
 					</form>
                     <div><Link to={"/forgot-password"} >I forgot my password</Link></div>
