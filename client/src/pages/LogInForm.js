@@ -10,20 +10,6 @@ function LogInForm(){
     const [passwordError , setPasswordError]=useState("");
     
 
-    // This function checks if inputed email is valid
-    const validateEmail=(email)=>{
-        //regex to check email format is valid
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    } ;
-    
-    const validatePassword=(password)=>{
-			// regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
-			const passwordRegex =
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-			return passwordRegex.test(password);
-		};
-
     //record changes for email address input
     const handleEmailChange = (e) => {
 			const email = e.target.value; 
@@ -36,35 +22,32 @@ function LogInForm(){
         setPasswordInput(password);
     };
 
-    
+    async function postLogInDeatils(userData) {
+			try {
+				const response = await fetch("/mock-api", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(userData),
+				});
+
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+
+				console.log("User signed up successfully!");
+			} catch (error) {
+				console.error("Error during signup:", error);
+			}
+		}
     const handleFormSubmit = (e) => {
 			e.preventDefault(); // Prevents the default form submission
+			const logInData={ emailInput , passwordInput };
 
-			// Validate email and password
-			if (validateEmail(emailInput) && validatePassword(passwordInput)) {
-				// Clear any existing error messages
-				setEmailError("");
-				setPasswordError("");
 
-				
-				console.log("Email:", emailInput);
-				console.log("Password:", passwordInput);
-			} else {
-				// Check specific validation errors
-				if (!validateEmail(emailInput)) {
-					setEmailError("Please enter a valid email address.");
-				} else {
-					setEmailError("");
-				}
-
-				if (!validatePassword(passwordInput)) {
-					setPasswordError(
-						"Password must be at least 8 characters long, and include at least one uppercase letter, one lowercase letter, one number, and one special character."
-					);
-				} else {
-					setPasswordError("");
-				}
-			}
+			postLogInDeatils(logInData);
+			
 		};
 
     return (
