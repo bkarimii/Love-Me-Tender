@@ -1,5 +1,3 @@
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 
 function ContractorSignUp(){
@@ -17,9 +15,9 @@ function ContractorSignUp(){
     const [emailError , setEmailError]=useState("");
     const [passwordMatches, setPasswordMatches] = useState(true);
 
-	// check if password has the requirements
+	// Check if password has the requirements
 	const validatePassword = (password) => {
-		// regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
+		// Regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
 		const passwordRegex =
 			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 		return passwordRegex.test(password);
@@ -27,12 +25,12 @@ function ContractorSignUp(){
 
 	// This function checks if inputed email is valid
 	const validateEmail = (email) => {
-		//regex to check email format is valid
+		//Regex to check email format is valid
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return emailRegex.test(email);
 	};
 
-	//fetch function to post data to back-end
+	//Fetch function to post data to back-end
 	async function postContractorDeatils(userData) {
 		try {
 			const response = await fetch("/mock-api", {
@@ -77,26 +75,25 @@ function ContractorSignUp(){
 							validatePassword(contractorDetails.password) &&
 							contractorDetails.password === contractorDetails.confirmPassword
 						) {
-							// if condtions verified clears all the error variables
+							// If condtions verified clears all the error variables
 							setEmailError("");
 							setPasswordError("");
 							setPasswordMatches(true);
-							//send a fetch post to the server
+							//Send a fetch post to the server
 							postContractorDeatils(contractorDetails);
 							console.log("successfully recorded");
 						} else {
-							//if one of conditions doesn't satisfied
-							//if email is not valid
+							//If one of conditions doesn't satisfied
+							//If email is not valid
 							if (!validateEmail(contractorDetails.email)) {
 								setEmailError("Enter a valid email address");
 								console.log("Email not valid!");
-								//if password is not valid
+								//If password is not valid
 							} else if (!validatePassword) {
 								setPasswordError(
 									"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
 								);
 								console.log("password requirement error");
-								
 							} else if (!passwordMatches) { // if passwords doesn't match
 								setPasswordMatches(false);
 								console.log("password doesn't match");
