@@ -96,7 +96,8 @@ function BidderSignUp(){
 						id="first-name"
 						name="firstName"
 						placeholder="Enter your first name"
-                        value={bidderDetails.firstName}
+						value={bidderDetails.firstName}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -107,7 +108,8 @@ function BidderSignUp(){
 						id="last-name"
 						name="lastName"
 						placeholder="Enter your last name"
-                        value={bidderDetails.lastName}
+						value={bidderDetails.lastName}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -118,7 +120,8 @@ function BidderSignUp(){
 						id="user-name"
 						name="userName"
 						placeholder="Enter your username"
-                        value={bidderDetails.userName}
+						value={bidderDetails.userName}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -129,7 +132,8 @@ function BidderSignUp(){
 						id="email"
 						name="email"
 						placeholder="Enter your email address"
-                        value={bidderDetails.email}
+						value={bidderDetails.email}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -140,7 +144,8 @@ function BidderSignUp(){
 						id="password"
 						name="password"
 						placeholder="Enter your password"
-                        value={bidderDetails.password}
+						value={bidderDetails.password}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -151,7 +156,8 @@ function BidderSignUp(){
 						id="confirm-password"
 						name="confirmPassword"
 						placeholder="Confirm your password"
-                        value={bidderDetails.confirmPassword}
+						value={bidderDetails.confirmPassword}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
