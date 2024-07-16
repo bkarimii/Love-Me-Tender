@@ -18,7 +18,7 @@ function SignUp(){
     };
 	const handleBackButtonClick=()=>{
 		setShowForm(false);
-		setShowRadioForm(true); // To show radio buttons
+		setShowRadioForm(true); // To show the radio buttons
 
 	};
 
