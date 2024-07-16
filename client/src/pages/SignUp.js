@@ -1,6 +1,7 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import BidderSignUp from "./BidderSignUp";
 
 function SignUp(){
     //to keep track value of radio buttons
@@ -11,7 +12,7 @@ function SignUp(){
     
     const handleSubmitUserType=(e)=>{
         e.preventDefault();
-        console.log(userType);
+        setShowForm(true);
 
     };
 
@@ -22,9 +23,9 @@ function SignUp(){
     return (
 			<>
 				<div>
-					<p>I am a :</p>
 					{!showForm && (
 						<form onSubmit={handleSubmitUserType}>
+							<p>I am a :</p>
 							<div>
 								<input
 									type="radio"
@@ -49,6 +50,7 @@ function SignUp(){
 						</form>
 					)}
 				</div>
+				<div>{userType === "bidder" && showForm && <BidderSignUp />}</div>
 			</>
 		);
 }
