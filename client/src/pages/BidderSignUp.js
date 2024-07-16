@@ -13,6 +13,8 @@ function BidderSignUp(){
     const [emailError , setEmailError]=useState("");
     const [passwordError , setPasswordError]=useState("");
     const [passwordMatches , setPasswordMatches]=useState(true);
+	// This variable tracks the message comes back from server after posting user details
+	const [backEndMessage , setBackEndMessage]=useState("");
 
 	// This function checks if inputed email is valid
 	const validateEmail = (email) => {
@@ -38,13 +40,15 @@ function BidderSignUp(){
 					},
 					body: JSON.stringify(userData),
 				});
-
+				const data=await response.json();
 				if (!response.ok) {
+					setBackEndMessage(data.message || "Something went wrong!");
 					throw new Error("Network response was not ok");
+				}else{
+					setBackEndMessage(data.message || "Signed up successfully ! please check your emailinbox for activation email.");
 				}
-
-				console.log("User signed up successfully!");
 			} catch (error) {
+				setBackEndMessage(error.message);
 				console.error("Error during signup:", error);
 			}
 		}
@@ -75,19 +79,15 @@ function BidderSignUp(){
 				setPasswordError("");
                 setPasswordMatches(true);
 				postBidderDeatils(bidderDetails);
-				console.log("successfully recorded");
 			} else {
 				if (!validateEmail(bidderDetails.email)) {
 					setEmailError("Enter a valid email address");
-					console.log("Email not valid!");
 				} else if (!validatePassword) {
 					setPasswordError(
 						"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
 					);
-					console.log("password requirement error");
 				} else if (!passwordMatches) {
                     setPasswordMatches(false);
-					console.log("password doesn't match");
 				}
 			}
 		};
@@ -172,6 +172,7 @@ function BidderSignUp(){
 				</div>
 				<button type="submit">Submit</button>
 			</form>
+			{backEndMessage && <p>{backEndMessage}</p>}
 		</>
 	);
 }
