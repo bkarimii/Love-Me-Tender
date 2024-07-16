@@ -29,7 +29,10 @@ export function Home() {
 					{message}
 				</h1>
 				<Link to="/about/this/site">About</Link>
+
 				<Link to="/login" className="login-link">Login</Link>
+
+				<Link to={"/signup"} >SignUp</Link>
 			</div>
 		</main>
 	);
