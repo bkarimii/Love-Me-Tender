@@ -13,6 +13,8 @@ function ContractorSignUp(){
 		confirmPassword: "",
 	});
 	const [passwordError, setPasswordError] = useState("");
+    const [emailError , setEmailError]=useState("");
+    const [passwordMatches, setPasswordMatches] = useState(false);
 
 	// check if password has the requirements
 	const validatePassword = (password) => {
@@ -67,6 +69,34 @@ function ContractorSignUp(){
 			}
 		};
 
+        const handleSubmit=(e)=>{
+            e.preventDefault();
+						if (
+							validateEmail(contractorDetails.email) &&
+							validatePassword(contractorDetails.password) &&
+							contractorDetails.password === contractorDetails.confirmPassword
+						) {
+							setEmailError("");
+							setPasswordError("");
+							setPasswordMatches(true);
+							postContractorDeatils(contractorDetails);
+							console.log("successfully recorded");
+						} else {
+							if (!validateEmail(contractorDetails.email)) {
+								setEmailError("Enter a valid email address");
+								console.log("Email not valid!");
+							} else if (!validatePassword) {
+								setPasswordError(
+									"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
+								);
+								console.log("password requirement error");
+							} else if (!passwordMatches) {
+								setPasswordMatches(false);
+								// setPasswordError("passwords doesn't match!");
+								console.log("password doesn't match");
+							}
+						}
+        };
 
 	return (
 		<>
@@ -96,7 +126,6 @@ function ContractorSignUp(){
 							required
 						/>
 					</div>
-					{/* ... other form elements */}
 					<button type="submit">Submit</button>
 				</form>
 			</div>
