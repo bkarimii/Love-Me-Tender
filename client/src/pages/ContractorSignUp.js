@@ -14,7 +14,7 @@ function ContractorSignUp(){
 	});
 	const [passwordError, setPasswordError] = useState("");
     const [emailError , setEmailError]=useState("");
-    const [passwordMatches, setPasswordMatches] = useState(false);
+    const [passwordMatches, setPasswordMatches] = useState(true);
 
 	// check if password has the requirements
 	const validatePassword = (password) => {
