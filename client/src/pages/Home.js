@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import "./Home.css";
 
 export function Home() {
@@ -29,8 +28,13 @@ export function Home() {
 					{message}
 				</h1>
 				<Link to="/about/this/site">About</Link>
+				<br />
+				<Link to="/publish-tender">
+					<button>Publish Tender</button>
+				</Link>
 			</div>
 		</main>
 	);
 }
+
 export default Home;
