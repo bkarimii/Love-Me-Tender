@@ -13,7 +13,7 @@ function ContractorSignUp() {
 	});
 	const [emailError, setEmailError] = useState("");
 	// This variable shows success of the request to during sign up that comes back from server
-	const [backEndSuccess, setBackEndSuccess] = useState(null);
+	const [resgisterStatus, setRegisterStatus] = useState("");
 
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,15 +29,12 @@ function ContractorSignUp() {
 				},
 				body: JSON.stringify(userData),
 			});
-			const data = await response.json();
-
 			if (!response.ok) {
 				throw new Error("Network response was not ok");
-			} else {
-				setBackEndSuccess(data.success);
 			}
+			setRegisterStatus("Registered successfully!");
 		} catch (error) {
-			setBackEndSuccess(false);
+			setRegisterStatus("Internal server error!");
 		}
 	}
 
@@ -128,8 +125,7 @@ function ContractorSignUp() {
 				</form>
 			</div>
 			<div>
-				{backEndSuccess && <p>Registeration was successfull</p>}
-				{/* message could be changed and replaced */}
+				<p>{resgisterStatus}</p>
 			</div>
 		</>
 	);
