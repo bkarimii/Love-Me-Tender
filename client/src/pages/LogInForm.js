@@ -5,16 +5,14 @@ function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
 
-	//This Variable handle any error comes back from server to display it
-	const [backEndMessage, setBackEndMessage] = useState("");
+	// This variable handles shows success of the request to login with a boolean variable
+	const [backEndSuccess, setBackEndSuccess] = useState("");
 
-	//Record changes for email address input
 	const handleEmailChange = (e) => {
 		const email = e.target.value;
 		setEmailInput(email);
 	};
 
-	//Record changes on password input
 	const handlePasswordChange = (e) => {
 		const password = e.target.value;
 		setPasswordInput(password);
@@ -31,18 +29,17 @@ function LogInForm() {
 			});
 			const data = await response.json();
 			if (!response.ok) {
-				setBackEndMessage(data.message || "Something went wrong! Try again.");
+				setBackEndSuccess(data.success);
 				throw new Error("Network response was not ok");
 			} else {
-				setBackEndMessage(data.message || "User signed up successfully!");
+				setBackEndSuccess(data.success);
 			}
 		} catch (error) {
-			console.error("Error during signup:", error);
-			setBackEndMessage(error.message);
+			setBackEndSuccess(error);
 		}
 	}
 	const handleFormSubmit = (e) => {
-		e.preventDefault(); // Prevents the default form submission
+		e.preventDefault();
 		const logInData = { email: emailInput, password: passwordInput };
 
 		postLogInDeatils(logInData);
@@ -76,7 +73,7 @@ function LogInForm() {
 					<Link to={"/forgot-password"}>I forgot my password</Link>
 				</div>
 				<div>
-					{backEndMessage && <p>{backEndMessage}</p>}
+					{backEndSuccess && <p>{backEndSuccess}</p>}
 					<p>
 						Don&apos;t have an account? <Link to={"/signup"}>Sign Up </Link>
 					</p>
