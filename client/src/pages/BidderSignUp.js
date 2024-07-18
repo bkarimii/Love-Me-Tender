@@ -11,28 +11,14 @@ function BidderSignUp() {
 		confirmPassword: "",
 	});
 	const [emailError, setEmailError] = useState("");
-	const [passwordError, setPasswordError] = useState("");
-	const [passwordMatches, setPasswordMatches] = useState(true);
+	const [backEndSuccess, setBackEndSuccess] = useState(null);
 
-	// This variable tracks the message comes back from server after posting user details
-	const [backEndSuccess, setBackEndSuccess] = useState("");
-
-	// This function checks if inputed email is valid
 	const validateEmail = (email) => {
 		//Regex to check email format is valid
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return emailRegex.test(email);
 	};
 
-	// Check if password has the requirements
-	const validatePassword = (password) => {
-		// Regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
-		const passwordRegex =
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-		return passwordRegex.test(password);
-	};
-
-	// Fetch function to post data to back-end
 	async function postBidderDeatils(userData) {
 		try {
 			const response = await fetch("/mock-api", {
@@ -44,56 +30,29 @@ function BidderSignUp() {
 			});
 			const data = await response.json();
 			if (!response.ok) {
-				setBackEndSuccess(data.success);
 				throw new Error("Network response was not ok");
 			} else {
 				setBackEndSuccess(data.success);
 			}
 		} catch (error) {
-			setBackEndSuccess(error.message);
-			console.error("Error during signup:", error);
+			setBackEndSuccess(false);
 		}
 	}
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setBidderDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-		// Check password validity on change
-		if (name === "password") {
-			const isValid = validatePassword(value);
-			setPasswordError(
-				isValid
-					? ""
-					: "Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
-			);
-		}
 	};
-
-	if (bidderDetails.password === bidderDetails.confirmPassword) {
-		setPasswordMatches(true);
-	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const isPasswordValid = validatePassword(bidderDetails.password);
-		const doPasswordsMatch =
-			bidderDetails.password === bidderDetails.confirmPassword;
 		const isEmailValid = validateEmail(bidderDetails.email);
-
-		if (isPasswordValid && isEmailValid && doPasswordsMatch) {
+		if (isEmailValid) {
 			setEmailError("");
-			setPasswordError("");
-			setPasswordMatches(true);
 			postBidderDeatils(bidderDetails);
 		} else {
 			if (!validateEmail(bidderDetails.email)) {
 				setEmailError("Enter a valid email address");
-			} else if (!validatePassword) {
-				setPasswordError(
-					"Your password  must be minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character"
-				);
-			} else if (!passwordMatches) {
-				setPasswordMatches(false);
 			}
 		}
 	};
@@ -149,32 +108,6 @@ function BidderSignUp() {
 						required
 					/>
 					{emailError && <p>{emailError}</p>}
-				</div>
-				<div>
-					<label htmlFor="password">Password:</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						placeholder="Enter your password"
-						value={bidderDetails.password}
-						onChange={handleInputChange}
-						required
-					/>
-					{passwordError && <p>{passwordError}</p>}
-				</div>
-				<div>
-					<label htmlFor="confirm-password">Confirm Password:</label>
-					<input
-						type="password"
-						id="confirm-password"
-						name="confirmPassword"
-						placeholder="Confirm your password"
-						value={bidderDetails.confirmPassword}
-						onChange={handleInputChange}
-						required
-					/>
-					{!passwordMatches && <p>Password does not match !</p>}
 				</div>
 				<button type="submit">Submit</button>
 			</form>
