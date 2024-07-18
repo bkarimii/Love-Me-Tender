@@ -26,18 +26,30 @@ function LogInForm() {
 			});
 			const data = await response.json();
 			if (response.ok) {
-				setSuccessfulLogIn("You're loggedIn now!");
+				setSuccessfulLogIn("successful");
 			} else {
-				setSuccessfulLogIn("logIn failed!");
+				setSuccessfulLogIn(data.message);
 			}
 		} catch (error) {
-			setSuccessfulLogIn("An error happened");
+			setSuccessfulLogIn(error.message);
 		}
 	}
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		const logInData = { email: emailInput, password: passwordInput };
 		postLogInDeatils(logInData);
+	};
+
+	const setDisplayingMessage = (msg) => {
+		if (msg === "successful") {
+			return "You're loggedin now!";
+		} else if (msg === "worngPassword") {
+			return "Password is incorrect!";
+		} else if (msg === "notRegistered") {
+			return "You're not registered! SignUp first!";
+		} else {
+			return "An error happened! try again later!";
+		}
 	};
 
 	return (
@@ -65,7 +77,7 @@ function LogInForm() {
 					<button type="submit">Log In</button>
 				</form>
 			</div>
-			{successfulLogIn && <p>{successfulLogIn}</p>}
+			<div>{setDisplayingMessage(successfulLogIn)}</div>
 		</>
 	);
 }
