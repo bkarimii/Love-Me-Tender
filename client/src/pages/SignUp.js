@@ -1,11 +1,9 @@
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import BidderSignUp from "./BidderSignUp";
 import ContractorSignUp from "./ContractorSignUp";
 
 function SignUp() {
-	// To keep track value of radio buttons
+	// To keep track value of the radio buttons
 	const [userType, setUserType] = useState("");
 
 	// Decides signup form to be shown or not
