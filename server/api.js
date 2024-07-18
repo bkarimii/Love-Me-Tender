@@ -8,29 +8,47 @@ router.get("/", (_, res) => {
 	res.json({ message: "Hello, world!" });
 });
 
-router.post("/login",async (req , res) => {
+router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
-	try{
+	try {
 		// Check if email exists in the database
 		const query = "SELECT * FROM users WHERE email = $1";
 		const dbResponse = await pool.query(query, [email]);
-		if(dbResponse.row.length === 0){
+		if (dbResponse.row.length === 0) {
 			// If email doesn't exist
-			return res.status(404).json({ message : "Email does not exist! if you don't have an account sign up first!" , success : false });
+			return res.status(404).json({
+				message:
+					"Email does not exist! if you don't have an account sign up first!",
+				success: false,
+			});
 		}
 		//Retrieve stored password in the db
 		const storedPassword = dbResponse.rows[0].password;
-		const passwordMatches = await bcrypt.compare(password,storedPassword); //Compare stored password with users password
-		if(!passwordMatches){
-			return res.status(401).json({ message: "Password is incorrect!", success : false }); //If passwords doesn't match send back 401 status
+		const passwordMatches = await bcrypt.compare(password, storedPassword); //Compare stored password with users password
+		if (!passwordMatches) {
+			return res
+				.status(401)
+				.json({ message: "Password is incorrect!", success: false }); //If passwords doesn't match send back 401 status
 		}
 		//Otherwise login will be successful
-		res.status(200).json({ message: "Login successful", success : true });
-
-
-	}catch(error){
-		res.status(500).json({ message: "Internal server error!", success : false });
+		res.status(200).json({ message: "Login successful", success: true });
+	} catch (error) {
+		res.status(500).json({ message: "Internal server error!", success: false });
 	}
 });
+
+//Validate users password
+function validatePassword(password) {
+	// regex to validate password (minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character)
+	const passwordRegex =
+		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+	return passwordRegex.test(password);
+}
+//Validate users email
+function validateEmail(email) {
+	//regex to check email format is valid
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return emailRegex.test(email);
+}
 
 export default router;
