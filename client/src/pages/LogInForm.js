@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
-
-	// This variable handles shows success of the request to login with a boolean variable
-	const [backEndSuccess, setBackEndSuccess] = useState("");
+	const [successfulLogIn, setSuccessfulLogIn] = useState("");
 
 	const handleEmailChange = (e) => {
 		const email = e.target.value;
@@ -28,20 +25,18 @@ function LogInForm() {
 				body: JSON.stringify(userData),
 			});
 			const data = await response.json();
-			if (!response.ok) {
-				setBackEndSuccess(data.success);
-				throw new Error("Network response was not ok");
+			if (response.ok) {
+				setSuccessfulLogIn("You're loggedIn now!");
 			} else {
-				setBackEndSuccess(data.success);
+				setSuccessfulLogIn("logIn failed!");
 			}
 		} catch (error) {
-			setBackEndSuccess(error);
+			setSuccessfulLogIn("An error happened");
 		}
 	}
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		const logInData = { email: emailInput, password: passwordInput };
-
 		postLogInDeatils(logInData);
 	};
 
@@ -69,16 +64,8 @@ function LogInForm() {
 					/>
 					<button type="submit">Log In</button>
 				</form>
-				<div>
-					<Link to={"/forgot-password"}>I forgot my password</Link>
-				</div>
-				<div>
-					{backEndSuccess && <p>{backEndSuccess}</p>}
-					<p>
-						Don&apos;t have an account? <Link to={"/signup"}>Sign Up </Link>
-					</p>
-				</div>
 			</div>
+			{successfulLogIn && <p>{successfulLogIn}</p>}
 		</>
 	);
 }
