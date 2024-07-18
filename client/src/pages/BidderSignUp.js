@@ -11,7 +11,7 @@ function BidderSignUp() {
 		confirmPassword: "",
 	});
 	const [emailError, setEmailError] = useState("");
-	const [backEndSuccess, setBackEndSuccess] = useState(null);
+	const [registerStatus, setRegisterStatus] = useState("");
 
 	const validateEmail = (email) => {
 		//Regex to check email format is valid
@@ -28,14 +28,12 @@ function BidderSignUp() {
 				},
 				body: JSON.stringify(userData),
 			});
-			const data = await response.json();
 			if (!response.ok) {
 				throw new Error("Network response was not ok");
-			} else {
-				setBackEndSuccess(data.success);
 			}
+			setRegisterStatus("Registered successfully!");
 		} catch (error) {
-			setBackEndSuccess(false);
+			setRegisterStatus("Internal server error!");
 		}
 	}
 
@@ -111,7 +109,7 @@ function BidderSignUp() {
 				</div>
 				<button type="submit">Submit</button>
 			</form>
-			{backEndSuccess && <p>Registeration was successfull</p>}
+			<div>{registerStatus}</div>
 		</>
 	);
 }
