@@ -8,14 +8,8 @@ function BidderSignUp() {
 		userName: "",
 		email: "",
 	});
-	const [emailError, setEmailError] = useState("");
-	const [registerStatus, setRegisterStatus] = useState("");
 
-	const validateEmail = (email) => {
-		//Regex to check email format is valid
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
-	};
+	const [registerStatus, setRegisterStatus] = useState("");
 
 	async function postBidderDeatils(userData) {
 		try {
@@ -27,7 +21,7 @@ function BidderSignUp() {
 				body: JSON.stringify(userData),
 			});
 			if (!response.ok) {
-				throw new Error("Network response was not ok");
+				setRegisterStatus("Registered failed!");
 			}
 			setRegisterStatus("Registered successfully!");
 		} catch (error) {
@@ -42,32 +36,8 @@ function BidderSignUp() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const isEmailValid = validateEmail(bidderDetails.email);
-		if (isEmailValid) {
-			setEmailError("");
-			postBidderDeatils(bidderDetails);
-		} else {
-			if (!validateEmail(bidderDetails.email)) {
-				setEmailError("Enter a valid email address");
-			}
-		}
+		postBidderDeatils(bidderDetails);
 	};
-
-	function displayMessage(msg) {
-		if (msg === "successful") {
-			return "registered successfully!";
-		} else if (msg === "invalidEmailFormat") {
-			return "email format is not correct!";
-		} else if (msg === "notRegistered") {
-			return "you are not registered!";
-		} else if (msg === "worngPassword") {
-			return "Password is incorrect!";
-		} else if (msg === "serverError") {
-			return "Internal server error";
-		} else {
-			return "Unkown error";
-		}
-	}
 
 	return (
 		<>
@@ -119,11 +89,10 @@ function BidderSignUp() {
 						onChange={handleInputChange}
 						required
 					/>
-					{emailError && <p>{emailError}</p>}
 				</div>
 				<button type="submit">Submit</button>
 			</form>
-			<div>{displayMessage(registerStatus)}</div>
+			<div>{registerStatus}</div>
 		</>
 	);
 }
