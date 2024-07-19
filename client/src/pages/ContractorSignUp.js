@@ -8,8 +8,6 @@ function ContractorSignUp() {
 		email: "",
 		company: "",
 		address: "",
-		password: "",
-		confirmPassword: "",
 	});
 	const [emailError, setEmailError] = useState("");
 	// This variable shows success of the request to during sign up that comes back from server
