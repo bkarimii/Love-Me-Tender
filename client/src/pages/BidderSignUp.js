@@ -53,6 +53,22 @@ function BidderSignUp() {
 		}
 	};
 
+	function displayMessage(msg) {
+		if (msg === "successful") {
+			return "registered successfully!";
+		} else if (msg === "invalidEmailFormat") {
+			return "email format is not correct!";
+		} else if (msg === "notRegistered") {
+			return "you are not registered!";
+		} else if (msg === "worngPassword") {
+			return "Password is incorrect!";
+		} else if (msg === "serverError") {
+			return "Internal server error";
+		} else {
+			return "Unkown error";
+		}
+	}
+
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
@@ -107,7 +123,7 @@ function BidderSignUp() {
 				</div>
 				<button type="submit">Submit</button>
 			</form>
-			<div>{registerStatus}</div>
+			<div>{displayMessage(registerStatus)}</div>
 		</>
 	);
 }
