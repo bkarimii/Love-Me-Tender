@@ -47,6 +47,8 @@ function LogInForm() {
 			return "Password is incorrect!";
 		} else if (msg === "notRegistered") {
 			return "You're not registered! SignUp first!";
+		}else if (msg === "invalidEmailFormat") {
+			return "Email format is not valid";
 		} else {
 			return "An error happened! try again later!";
 		}
