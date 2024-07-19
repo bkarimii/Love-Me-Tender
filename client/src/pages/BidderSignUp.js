@@ -7,8 +7,6 @@ function BidderSignUp() {
 		lastName: "",
 		userName: "",
 		email: "",
-		password: "",
-		confirmPassword: "",
 	});
 	const [emailError, setEmailError] = useState("");
 	const [registerStatus, setRegisterStatus] = useState("");
