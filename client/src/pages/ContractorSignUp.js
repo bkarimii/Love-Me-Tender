@@ -27,12 +27,13 @@ function ContractorSignUp() {
 				},
 				body: JSON.stringify(userData),
 			});
+			const data = response.json();
 			if (!response.ok) {
-				throw new Error("Network response was not ok");
+				setRegisterStatus(data.message);
 			}
-			setRegisterStatus("Registered successfully!");
+			setRegisterStatus(data.message);
 		} catch (error) {
-			setRegisterStatus("Internal server error!");
+			setRegisterStatus(error.message);
 		}
 	}
 
@@ -55,6 +56,21 @@ function ContractorSignUp() {
 			}
 		}
 	};
+	function displayMessage(msg) {
+		if (msg === "successful") {
+			return "registered successfully!";
+		} else if (msg === "mismatchPassword") {
+			return "passwords do not match";
+		} else if (msg === "emailAlreadyExists") {
+			return "email exist";
+		} else if (msg === "invalidType") {
+			return "Password is incorrect!";
+		} else if (msg === "serverError") {
+			return "Internal server error";
+		} else {
+			return "Unkown error";
+		}
+	}
 
 	return (
 		<>
@@ -123,7 +139,7 @@ function ContractorSignUp() {
 				</form>
 			</div>
 			<div>
-				<p>{resgisterStatus}</p>
+				<p>{displayMessage(resgisterStatus)}</p>
 			</div>
 		</>
 	);
