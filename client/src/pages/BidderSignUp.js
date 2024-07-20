@@ -21,7 +21,7 @@ function BidderSignUp() {
 				body: JSON.stringify(userData),
 			});
 			if (!response.ok) {
-				setRegisterStatus("Registered failed!");
+				setRegisterStatus("Registeration failed!");
 			}
 			setRegisterStatus("Registered successfully!");
 		} catch (error) {
