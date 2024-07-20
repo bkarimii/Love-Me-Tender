@@ -3,12 +3,8 @@ import BidderSignUp from "./BidderSignUp";
 import ContractorSignUp from "./ContractorSignUp";
 
 function SignUp() {
-	// To keep track value of the radio buttons
 	const [userType, setUserType] = useState("");
-
-	// Decides signup form to be shown or not
 	const [showForm, setShowForm] = useState(false);
-	// Radio buttons to be shown or hidden
 	const [showRadioForm, setShowRadioForm] = useState(true);
 
 	const handleSubmitUserType = (e) => {
@@ -22,7 +18,7 @@ function SignUp() {
 
 	const handleBackButtonClick = () => {
 		setShowForm(false);
-		setShowRadioForm(true); // To show radio buttons
+		setShowRadioForm(true);
 	};
 
 	return (
