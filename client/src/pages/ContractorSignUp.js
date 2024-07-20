@@ -9,14 +9,8 @@ function ContractorSignUp() {
 		company: "",
 		address: "",
 	});
-	const [emailError, setEmailError] = useState("");
 	// This variable shows success of the request to during sign up that comes back from server
 	const [resgisterStatus, setRegisterStatus] = useState("");
-
-	const validateEmail = (email) => {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return emailRegex.test(email);
-	};
 
 	async function postContractorDetails(userData) {
 		try {
@@ -27,13 +21,12 @@ function ContractorSignUp() {
 				},
 				body: JSON.stringify(userData),
 			});
-			const data = response.json();
-			if (!response.ok) {
-				setRegisterStatus(data.message);
+			if (response.ok) {
+				setRegisterStatus("successfully registered .");
 			}
-			setRegisterStatus(data.message);
+			setRegisterStatus("Register failed!");
 		} catch (error) {
-			setRegisterStatus(error.message);
+			setRegisterStatus("Internal server error");
 		}
 	}
 
@@ -47,30 +40,8 @@ function ContractorSignUp() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (validateEmail(contractorDetails.email)) {
-			setEmailError("");
-			postContractorDetails(contractorDetails);
-		} else {
-			if (!validateEmail(contractorDetails.email)) {
-				setEmailError("Enter a valid email address");
-			}
-		}
+		postContractorDetails(contractorDetails);
 	};
-	function displayMessage(msg) {
-		if (msg === "successful") {
-			return "registered successfully!";
-		} else if (msg === "mismatchPassword") {
-			return "passwords do not match";
-		} else if (msg === "emailAlreadyExists") {
-			return "email exist";
-		} else if (msg === "invalidType") {
-			return "Password is incorrect!";
-		} else if (msg === "serverError") {
-			return "Internal server error";
-		} else {
-			return "Unkown error";
-		}
-	}
 
 	return (
 		<>
@@ -111,7 +82,6 @@ function ContractorSignUp() {
 							onChange={handleInputChange}
 							required
 						/>
-						{emailError && <p>{emailError}</p>}
 					</div>
 					<div>
 						<label htmlFor="company">Company:</label>
@@ -139,7 +109,7 @@ function ContractorSignUp() {
 				</form>
 			</div>
 			<div>
-				<p>{displayMessage(resgisterStatus)}</p>
+				<p>{resgisterStatus}</p>
 			</div>
 		</>
 	);
