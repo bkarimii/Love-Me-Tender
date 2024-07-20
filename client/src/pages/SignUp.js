@@ -33,7 +33,7 @@ function SignUp() {
 				</div>
 				{!showForm && showRadioForm && (
 					<form onSubmit={handleSubmitUserType}>
-						<p>I am a :</p>
+						<p>Select the user type: </p>
 						<div>
 							<input
 								type="radio"
