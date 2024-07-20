@@ -22,9 +22,9 @@ function ContractorSignUp() {
 				body: JSON.stringify(userData),
 			});
 			if (response.ok) {
-				setRegisterStatus("Successfully registered .");
+				setRegisterStatus("Successfully registered.");
 			}
-			setRegisterStatus("Registeration failed!");
+			setRegisterStatus("Registration failed!");
 		} catch (error) {
 			setRegisterStatus("Internal server error");
 		}
