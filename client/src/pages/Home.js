@@ -32,6 +32,9 @@ export function Home() {
 				<Link to="/publish-tender">
 					<button>Publish Tender</button>
 				</Link>
+				<Link to="/BuyerTenderList">
+					<button>My Tender</button>
+				</Link>
 				<Link to={"/signup"}>SignUp</Link>
 			</div>
 		</main>
