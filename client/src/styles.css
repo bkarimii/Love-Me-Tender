@@ -88,3 +88,12 @@ button:hover {
 	line-clamp: 4;
 	overflow: hidden;
 }
+
+.bid-container {
+	height: 40rem;
+	width: 100%;
+	color: black;
+	display: grid;
+	justify-content: center;
+	gap: 1rem;
+}

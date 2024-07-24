@@ -33,7 +33,11 @@ export function Home() {
 					<button>Publish Tender</button>
 				</Link>
 				<Link to="/BuyerTenderList">
-					<button>My Tender</button>
+					<button>My Tenders</button>
+				</Link>
+
+				<Link to="/BidderBiddingList">
+					<button>My Biddings</button>
 				</Link>
 				<Link to={"/signup"}>SignUp</Link>
 			</div>
