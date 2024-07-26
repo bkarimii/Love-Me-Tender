@@ -141,14 +141,14 @@ router.get("/buyer-tender", async (req, res) => {
 	const itemsPerPage = 25;
 
 	const offset = (page - 1) * itemsPerPage;
-	const result = await db.query("SELECT * FROM tender WHERE buyer_id = $1 LIMIT $2 OFFSET $3", [buyerId, itemsPerPage, offset]);
+	const result = await db.query(
+		"SELECT * FROM tender WHERE buyer_id = $1 LIMIT $2 OFFSET $3",
+		[buyerId, itemsPerPage, offset]
+	);
 	result
 		? res.send(result.rows)
-		:
-		res.status(500)
-			.send({ code: "SERVER_ERROR" });
+		: res.status(500).send({ code: "SERVER_ERROR" });
 });
-
 
 router.get("/bidder-bid", async (req, res) => {
 	const bidderId = 1;
@@ -156,12 +156,13 @@ router.get("/bidder-bid", async (req, res) => {
 	const itemsPerPage = 25;
 
 	const offset = (page - 1) * itemsPerPage;
-	const result = await db.query("SELECT * FROM bid WHERE bidder_id = $1 LIMIT $2 OFFSET $3", [bidderId, itemsPerPage, offset]);
+	const result = await db.query(
+		"SELECT * FROM bid WHERE bidder_id = $1 LIMIT $2 OFFSET $3",
+		[bidderId, itemsPerPage, offset]
+	);
 	result
 		? res.send(result.rows)
-		:
-		res.status(500)
-			.send({ code: "SERVER_ERROR" });
+		: res.status(500).send({ code: "SERVER_ERROR" });
 });
 
 export default router;

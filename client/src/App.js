@@ -5,7 +5,6 @@ import BuyerTenderList from "./BuyerTenderList";
 import BidderBiddingList from "./BidderBiddingList";
 import SignUp from "./pages/SignUp";
 
-
 const App = () => (
 	<Routes>
 		<Route path="/" element={<Home />} />
