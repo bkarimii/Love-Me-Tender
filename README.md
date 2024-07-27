@@ -12,7 +12,11 @@ Ensure the following are installed on your system before proceeding:
 
 This is our deployed website link https://love-me-tender-51qa.onrender.com
 
-The render is on auto-deploy so it should render new changes to the website.
+To deploy the project's latest version follow the steps below;
+
+1. Go to render dashboard
+2. Click on Manual Deploy button
+3. Select deploy latest commit
 
 ## ⏬ Installation and setup
 

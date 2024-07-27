@@ -27,11 +27,10 @@ export function Home() {
 				<h1 className="message" data-qa="message">
 					{message}
 				</h1>
-				<Link to="/about/this/site">About</Link>
+				<Link to="/admin-dashboard">Admin Dashboard</Link>
 				<br />
-				<Link to="/publish-tender">
-					<button>Publish Tender</button>
-				</Link>
+				<Link to="/buyer-dashboard">Buyer Dashboard</Link>
+				<br />
 				<Link to="/BuyerTenderList">
 					<button>My Tenders</button>
 				</Link>
