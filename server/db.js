@@ -7,7 +7,7 @@ const localDb = ["0.0.0.0", "127.0.0.1", "localhost"].includes(
 	new URL(config.dbUrl).hostname
 );
 
-const pool = new Pool({
+export const pool = new Pool({
 	connectionString: config.dbUrl,
 	connectionTimeoutMillis: 5000,
 	ssl: localDb ? false : { rejectUnauthorized: false },
