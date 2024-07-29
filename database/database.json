@@ -7,13 +7,12 @@
 		"database": "cyf_tms",
 		"port": "5432"
 	},
-	"production": {
-		"DATABASE_URL": "postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}",
+	"prod": {
 		"driver": "pg",
-		"host": "${DB_HOST}",
-		"user": "${DB_USER}",
-		"password": "${DB_PASS}",
-		"database": "${DB_NAME}",
-		"port": "${DB_PORT}"
+		"host": { "ENV": "DB_HOST" },
+		"user": { "ENV": "DB_USER" },
+		"password": { "ENV": "DB_PASS" },
+		"database": { "ENV": "DB_NAME" },
+		"port": { "ENV": "DB_PORT" }
 	}
 }
