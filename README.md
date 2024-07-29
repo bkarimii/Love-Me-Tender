@@ -40,11 +40,19 @@ docker compose up -d
 npm install
 ```
 
-4. To run the migrations, navigate to database folder and run
+4. Run the build command
 
 ```sh
-node ../node_modules/db-migrate/bin/db-migrate up
+npm run build
 ```
+
+5. Run the code
+
+```sh
+npm start
+```
+
+## Database Migrations
 
 To modify the database, run the command below from the database folder, and add DB modifications in the generated ...-up.sql file
 
@@ -52,16 +60,4 @@ Then run above command again.
 
 ```sh
 node ../node_modules/db-migrate/bin/db-migrate create name-for-the-migration --sql-file
-```
-
-5. Run the build command
-
-```sh
-npm run build
-```
-
-6. Run the code
-
-```sh
-npm start
 ```

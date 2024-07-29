@@ -13,14 +13,15 @@
 		"cleanup": "del-cli ./dist/*",
 		"dev": "concurrently --kill-others \"npm:dev:*\"",
 		"dev:client": "webpack serve --config client/webpack/dev.config.js",
-		"dev:server": "cross-env LOG_LEVEL=debug PORT=3100 nodemon --inspect server/server.js",
+		"dev:server": "npm run migrate && cross-env LOG_LEVEL=debug PORT=3100 nodemon --inspect server/server.js",
 		"lint": "npm run lint:eslint && npm run lint:prettier -- --check",
 		"preserve": "npm run build",
 		"serve": "npm start",
 		"start": "node dist/server.js",
 		"lint:eslint": "eslint .",
 		"lint:fix": "npm run lint:eslint -- --fix && npm run lint:prettier -- --write",
-		"lint:prettier": "prettier ."
+		"lint:prettier": "prettier .",
+		"migrate": "node ./node_modules/db-migrate/bin/db-migrate up --config database/database.json --migrations-dir database/migrations"
 	},
 	"repository": {
 		"type": "git",
