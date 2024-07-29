@@ -18,7 +18,7 @@ const BidderBiddingList = () => {
 				}
 				const data = await response.json();
 				setLoading(false);
-				setBidderList(data);
+				setBidderList(data.results);
 			} catch (error) {
 				setErrorMsg(error.message);
 			}
@@ -34,9 +34,13 @@ const BidderBiddingList = () => {
 		return <div>Loading!!</div>;
 	}
 
+	if (bidderList.length === 0) {
+		return <div>No Bidding placed yet!!</div>;
+	}
+
 	return (
 		<>
-			<h1>Buyer Tenders List</h1>
+			<h1>Bidder Bidding List</h1>
 			<div className="bids-container">
 				{" "}
 				{bidderList.map((bid, index) => (
