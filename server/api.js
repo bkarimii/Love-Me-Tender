@@ -6,6 +6,48 @@ import { v4 as uuidv4 } from "uuid";
 const itemsPerPage = 25;
 const router = Router();
 
+const auth = async (req, res, next) => {
+	try {
+		const authHeader = req.headers.authorization;
+		const token = authHeader?.split(" ")[1];
+
+		if (!token) {
+			return res.status(401).json({ code: "UNAUTHRIZED" });
+		}
+
+		const sessionResult = await db.query(
+			"SELECT * FROM session WHERE token = $1",
+			[token]
+		);
+		const session = sessionResult.rows[0];
+
+		if (!session) {
+			return res.status(401).json({ code: "UNAUTHRIZED" });
+		}
+
+		const currentTime = new Date();
+		if (session.expires_at <= currentTime) {
+			return res.status(401).json({ code: "EXPIRED_SESSION" });
+		}
+
+		const userResult = await db.query("SELECT * FROM users WHERE id = $1", [
+			session.user_id,
+		]);
+		const user = userResult.rows[0];
+
+		if (!user) {
+			return res.status(500).json({ code: "SERVER_ERROR" });
+		}
+
+		req.user = user;
+		next();
+	} catch (error) {
+		res.status(500).json({ code: "SERVER_ERROR" });
+	}
+};
+
+router.use(auth);
+
 router.get("/", (_, res) => {
 	res.status(200).json({ message: "WELCOME TO LOVE ME TENDER SITE" });
 });
@@ -75,7 +117,7 @@ router.post("/publish-tenders", (req, res) => {
 });
 
 router.get("/buyer-tender", async (req, res) => {
-	const buyerId = 1;
+	const buyerId = req.user.id;
 	let page = parseInt(req.query.page) || 1;
 	const offset = (page - 1) * itemsPerPage;
 
@@ -103,7 +145,7 @@ router.get("/buyer-tender", async (req, res) => {
 });
 
 router.get("/bidder-bid", async (req, res) => {
-	const bidderId = 1;
+	const bidderId = req.user.id;
 	const page = parseInt(req.query.page) || 1;
 	const offset = (page - 1) * itemsPerPage;
 
