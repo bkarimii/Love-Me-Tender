@@ -6,8 +6,19 @@ import { v4 as uuidv4 } from "uuid";
 const itemsPerPage = 25;
 const router = Router();
 
+const allowlist = {
+	POST: ["/sign-in"],
+};
+
 const auth = async (req, res, next) => {
 	try {
+		const method = req.method.toUpperCase();
+		const path = req.path;
+
+		if (allowlist[method] && allowlist[method].includes(path)) {
+			return next();
+		}
+
 		const authHeader = req.headers.authorization;
 		const token = authHeader?.split(" ")[1];
 
