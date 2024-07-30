@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
-	const [statusMessage, setStatusMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const handleEmailChange = (e) => {
 		const email = e.target.value;
@@ -27,25 +28,26 @@ function LogInForm() {
 			const data = await response.json();
 			if (response.ok) {
 				const token = data.resources.token;
-				// Store the token in a local storage
 				localStorage.setItem("authToken", token);
-				setStatusMessage("successfully logged in");
+				setErrorMessage("successfull");
+				Navigate("/admin-dashboard");
 			} else {
 				switch (response.status) {
 					case 401:
-						statusMessage("Incorrect password or email.");
+						errorMessage("Incorrect password or email.");
 						break;
 					case 500:
-						statusMessage("Internal server error. Please try again later.");
+						errorMessage("Internal server error. Please try again later.");
 						break;
 					default:
-						statusMessage("An error occurred. Please try again.");
+						errorMessage("An error occurred. Please try again.");
 				}
 			}
 		} catch (error) {
-			setStatusMessage("Unknown Error happened try again later.");
+			setErrorMessage("Unknown Error happened try again later.");
 		}
 	}
+
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		const logInData = { email: emailInput, password: passwordInput };
@@ -77,7 +79,7 @@ function LogInForm() {
 					<button type="submit">Log In</button>
 				</form>
 			</div>
-			<div>{statusMessage}</div>
+			<div>{errorMessage}</div>
 		</>
 	);
 }
