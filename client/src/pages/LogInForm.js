@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
-	const [successfulLogIn, setSuccessfulLogIn] = useState("");
+	const [statusMessage, setStatusMessage] = useState("");
 
 	const handleEmailChange = (e) => {
 		const email = e.target.value;
@@ -29,30 +29,27 @@ function LogInForm() {
 				const token = data.resources.token;
 				// Store the token in a local storage
 				localStorage.setItem("authToken", token);
-				setSuccessfulLogIn("successful");
+				setStatusMessage("successfully logged in");
 			} else {
-				setSuccessfulLogIn("failed");
+				switch (response.status) {
+					case 401:
+						statusMessage("Incorrect password or email.");
+						break;
+					case 500:
+						statusMessage("Internal server error. Please try again later.");
+						break;
+					default:
+						statusMessage("An error occurred. Please try again.");
+				}
 			}
 		} catch (error) {
-			setSuccessfulLogIn(error.message);
+			setStatusMessage("Unknown Error happened try again later.");
 		}
 	}
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		const logInData = { email: emailInput, password: passwordInput };
 		postLogInDeatils(logInData);
-	};
-
-	const setDisplayingMessage = (msg) => {
-		if (msg === "successful") {
-			return "You're loggedin now!";
-		} else if (msg === "failed") {
-			return "credentials invalid";
-		} else if (msg === "SERVER_ERROR") {
-			return "Server error happened";
-		} else {
-			return "Unkown error happened! try again later!";
-		}
 	};
 
 	return (
@@ -80,7 +77,7 @@ function LogInForm() {
 					<button type="submit">Log In</button>
 				</form>
 			</div>
-			<div>{setDisplayingMessage(successfulLogIn)}</div>
+			<div>{statusMessage}</div>
 		</>
 	);
 }
