@@ -131,7 +131,7 @@ const PublishTenderForm = () => {
 	};
 
 	return (
-		<div className="container">
+		<main className="container">
 			<h1>Publish Tender</h1>
 			{errors.length > 0 && (
 				<div className="error-message">
@@ -212,7 +212,7 @@ const PublishTenderForm = () => {
 				</div>
 				<button type="submit">Publish Tender</button>
 			</form>
-		</div>
+		</main>
 	);
 };
 

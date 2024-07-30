@@ -40,7 +40,7 @@ function BidderSignUp() {
 	};
 
 	return (
-		<>
+		<main>
 			<form onSubmit={handleSubmit}>
 				<div>
 					<label htmlFor="first-name">First Name:</label>
@@ -93,7 +93,7 @@ function BidderSignUp() {
 				<button type="submit">Submit</button>
 			</form>
 			<div>{registerStatus}</div>
-		</>
+		</main>
 	);
 }
 

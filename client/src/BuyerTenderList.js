@@ -39,7 +39,7 @@ const BuyerTenderList = () => {
 	}
 
 	return (
-		<>
+		<main>
 			<h1>Buyer Tenders List</h1>
 			<div className="tender-container">
 				{" "}
@@ -63,7 +63,7 @@ const BuyerTenderList = () => {
 					</div>
 				))}
 			</div>
-		</>
+		</main>
 	);
 };
 

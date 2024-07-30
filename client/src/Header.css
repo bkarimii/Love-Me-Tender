@@ -1,0 +1,37 @@
+.header {
+	position: relative;
+	grid-area: "header";
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	background-color: var(--white);
+	padding-inline: 64px;
+}
+
+.logo {
+	height: 58px;
+	width: 232px;
+	margin-top: 77px;
+}
+
+.nav-list {
+	margin-top: 104px;
+	display: flex;
+	justify-content: right;
+	justify-content: right;
+	gap: 21px;
+	width: 100%;
+	height: 30px;
+}
+
+.nav-link {
+	text-align: center;
+	border-radius: 8px;
+	height: 32px;
+	padding: 7px;
+	color: var(--black);
+}
+
+.nav-link:hover,
+.nav-link.active {
+	background-color: var(--light-grey);
+}
