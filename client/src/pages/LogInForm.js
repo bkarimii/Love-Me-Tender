@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPasswordInput] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
+	const navigate = useNavigate();
 
 	const handleEmailChange = (e) => {
 		const email = e.target.value;
@@ -29,18 +30,17 @@ function LogInForm() {
 			if (response.ok) {
 				const token = data.resources.token;
 				localStorage.setItem("authToken", token);
-				setErrorMessage("successfull");
-				Navigate("/admin-dashboard");
+				navigate("/admin-dashboard");
 			} else {
 				switch (response.status) {
 					case 401:
-						errorMessage("Incorrect password or email.");
+						setErrorMessage("Incorrect password or email.");
 						break;
 					case 500:
-						errorMessage("Internal server error. Please try again later.");
+						setErrorMessage("Internal server error. Please try again later.");
 						break;
 					default:
-						errorMessage("An error occurred. Please try again.");
+						setErrorMessage("An error occurred. Please try again.");
 				}
 			}
 		} catch (error) {
