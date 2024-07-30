@@ -17,7 +17,7 @@ function LogInForm() {
 
 	async function postLogInDeatils(userData) {
 		try {
-			const response = await fetch("/mock-api", {
+			const response = await fetch("/api/sign-in", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -26,9 +26,12 @@ function LogInForm() {
 			});
 			const data = await response.json();
 			if (response.ok) {
+				const token = data.resources.token;
+				// Store the token in a local storage
+				localStorage.setItem("authToken", token);
 				setSuccessfulLogIn("successful");
 			} else {
-				setSuccessfulLogIn(data.message);
+				setSuccessfulLogIn("failed");
 			}
 		} catch (error) {
 			setSuccessfulLogIn(error.message);
@@ -43,14 +46,12 @@ function LogInForm() {
 	const setDisplayingMessage = (msg) => {
 		if (msg === "successful") {
 			return "You're loggedin now!";
-		} else if (msg === "worngPassword") {
-			return "Password is incorrect!";
-		} else if (msg === "notRegistered") {
-			return "You're not registered! SignUp first!";
-		}else if (msg === "invalidEmailFormat") {
-			return "Email format is not valid";
+		} else if (msg === "failed") {
+			return "credentials invalid";
+		} else if (msg === "SERVER_ERROR") {
+			return "Server error happened";
 		} else {
-			return "An error happened! try again later!";
+			return "Unkown error happened! try again later!";
 		}
 	};
 
