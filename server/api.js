@@ -386,7 +386,12 @@ router.post("/sign-in", async (req, res) => {
 			[token, user.id, expirationDate]
 		);
 
-		res.status(200).json({ resource: { token } });
+		res.status(200).json({
+			resource: {
+				token: token,
+				user_type: user.user_type,
+			},
+		});
 	} catch (error) {
 		res.status(500).json({ code: "SERVER_ERROR" });
 	}
