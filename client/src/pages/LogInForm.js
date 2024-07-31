@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logo from "../assets/images/CTY-logo-rectangle.png";
+import "./LogInForm.css";
 
 function LogInForm() {
 	const [emailInput, setEmailInput] = useState("");
@@ -55,32 +57,47 @@ function LogInForm() {
 	};
 
 	return (
-		<>
-			<div>
-				<form onSubmit={handleFormSubmit}>
-					<label htmlFor="email">E-mail:</label>
-					<input
-						type="email"
-						id="email"
-						name="email"
-						value={emailInput}
-						onChange={handleEmailChange}
-						required
-					/>
-					<label htmlFor="password">Password:</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						value={passwordInput}
-						onChange={handlePasswordChange}
-						required
-					/>
-					<button type="submit">Log In</button>
+		<main>
+			<div className="form-container">
+				<div className="form-logo">
+					<img src={Logo} alt="logo" />
+				</div>
+				<h5 className="form-heading">Log in </h5>
+				<form onSubmit={handleFormSubmit} className="form">
+					<label htmlFor="email" className="form-label">
+						Email
+						<input
+							className="form-input"
+							type="email"
+							id="email"
+							name="email"
+							placeholder="Value"
+							value={emailInput}
+							onChange={handleEmailChange}
+							required
+						/>
+					</label>
+
+					<label htmlFor="password" className="form-label">
+						Password
+						<input
+							className="form-input"
+							type="password"
+							id="password"
+							name="password"
+							placeholder="Value"
+							value={passwordInput}
+							onChange={handlePasswordChange}
+							required
+						/>
+					</label>
+					<p className="error-message">{errorMessage}</p>
+					<button className="form-btn" type="submit">
+						Sign In
+					</button>
 				</form>
 			</div>
-			<div>{errorMessage}</div>
-		</>
+		</main>
 	);
 }
 

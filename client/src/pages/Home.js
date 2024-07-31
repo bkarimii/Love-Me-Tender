@@ -1,48 +1,10 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import LogInForm from "./LogInForm";
 import "./Home.css";
 
 export function Home() {
-	const [message, setMessage] = useState("Loading...");
-
-	useEffect(() => {
-		fetch("/api")
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error(res.statusText);
-				}
-				return res.json();
-			})
-			.then((body) => {
-				setMessage(body.message);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}, []);
-
 	return (
 		<main role="main">
-			<div>
-				<h1 className="message" data-qa="message">
-					{message}
-				</h1>
-				<Link to="/admin-dashboard">Admin Dashboard</Link>
-				<br />
-				<Link to="/buyer-dashboard">Buyer Dashboard</Link>
-				<br />
-				<Link to="/BuyerTenderList">
-					<button>My Tenders</button>
-				</Link>
-
-				<Link to="/BidderBiddingList">
-					<button>My Biddings</button>
-				</Link>
-				<Link to={"/signup"}>SignUp</Link>
-				<Link to="/login" className="login-link">
-					Login
-				</Link>
-			</div>
+			<LogInForm />
 		</main>
 	);
 }

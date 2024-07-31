@@ -1,7 +1,6 @@
 .footer {
 	display: flex;
 	justify-content: space-between;
-	height: 182px;
 	border-top: 1px solid #d9d9d9;
 	background-color: var(--white);
 	padding-top: 32px;

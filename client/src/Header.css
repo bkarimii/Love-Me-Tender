@@ -5,22 +5,22 @@
 	grid-template-columns: repeat(2, 1fr);
 	background-color: var(--white);
 	padding-inline: 64px;
+	align-items: center;
 }
 
 .logo {
 	height: 58px;
 	width: 232px;
-	margin-top: 77px;
 }
 
 .nav-list {
-	margin-top: 104px;
 	display: flex;
 	justify-content: right;
 	justify-content: right;
 	gap: 21px;
 	width: 100%;
 	height: 30px;
+	padding-top: 1rem;
 }
 
 .nav-link {
