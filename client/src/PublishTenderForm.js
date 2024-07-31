@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import "./PublishTenderForm.css";
 import "./styles.css";
+import Logo from "./assets/images/CTY-logo-rectangle.png";
 
 const PublishTenderForm = () => {
 	const [title, setTitle] = useState("");
@@ -134,87 +136,99 @@ const PublishTenderForm = () => {
 	};
 
 	return (
-		<main className="container">
-			<h1>Publish Tender</h1>
-			{errors.length > 0 && (
-				<div className="error-message">
-					<ul>
-						{errors.map((error, index) => (
-							<li key={index}>{error}</li>
-						))}
-					</ul>
+		<main>
+			<div className="publish-form-container">
+				<div className="form-logo">
+					<img src={Logo} alt="logo" />
 				</div>
-			)}
-			<form onSubmit={handleSubmit}>
-				<div className="form-group">
-					<label htmlFor="title">Tender Title:</label>
-					<input
-						type="text"
-						id="title"
-						value={title}
-						onChange={handleTitleChange}
-						maxLength="50"
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="description">Tender Description:</label>
-					<textarea
-						id="description"
-						value={description}
-						onChange={handleDescriptionChange}
-						maxLength="7500"
-						required
-					></textarea>
-				</div>
-				<div className="form-group">
-					<label htmlFor="announcementDate">Tender Announcement Date:</label>
-					<input
-						type="date"
-						id="announcementDate"
-						value={announcementDate}
-						onChange={handleAnnouncementDateChange}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="closingDate">Tender Closing Date:</label>
-					<input
-						type="date"
-						id="closingDate"
-						value={closingDate}
-						onChange={handleClosingDateChange}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="deadlineDate">Tender Project Deadline Date:</label>
-					<input
-						type="date"
-						id="deadlineDate"
-						value={deadlineDate}
-						onChange={handleDeadlineDateChange}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="skills">Skills Required:</label>
-					<select
-						id="skills"
-						multiple
-						value={selectedSkills}
-						onChange={handleSkillsChange}
-						required
-					>
-						{skills.map((skill) => (
-							<option key={skill.skill_id} value={skill.skill_id}>
-								{skill.skill_name}
-							</option>
-						))}
-					</select>
-				</div>
-				<button type="submit">Publish Tender</button>
-			</form>
+				<h1 className="form-heading">Publish New Tender</h1>
+				{errors.length > 0 && (
+					<div className="error-message">
+						<ul>
+							{errors.map((error, index) => (
+								<li key={index}>{error}</li>
+							))}
+						</ul>
+					</div>
+				)}
+				<form className="form" onSubmit={handleSubmit}>
+					<div className="form-label">
+						<label htmlFor="title">Tender Title:</label>
+						<input
+							className="form-input"
+							type="text"
+							id="title"
+							value={title}
+							onChange={handleTitleChange}
+							maxLength="50"
+							required
+						/>
+					</div>
+					<div className="form-label form-description">
+						<label htmlFor="description">Tender Description:</label>
+						<textarea
+							className="form-input"
+							id="description"
+							value={description}
+							onChange={handleDescriptionChange}
+							maxLength="7500"
+							required
+						></textarea>
+					</div>
+					<div className="form-label date">
+						<label htmlFor="announcementDate">Tender Announcement Date:</label>
+						<input
+							className="form-input"
+							type="date"
+							id="announcementDate"
+							value={announcementDate}
+							onChange={handleAnnouncementDateChange}
+							required
+						/>
+					</div>
+					<div className="form-label date">
+						<label htmlFor="closingDate">Tender Closing Date:</label>
+						<input
+							className="form-input"
+							type="date"
+							id="closingDate"
+							value={closingDate}
+							onChange={handleClosingDateChange}
+							required
+						/>
+					</div>
+					<div className="form-label date">
+						<label htmlFor="deadlineDate">Tender Project Deadline Date:</label>
+						<input
+							className="form-input"
+							type="date"
+							id="deadlineDate"
+							value={deadlineDate}
+							onChange={handleDeadlineDateChange}
+							required
+						/>
+					</div>
+					<div className="form-label skills-dropdown">
+						<label htmlFor="skills">Skills Required:</label>
+						<select
+							className="form-input"
+							id="skills"
+							value={selectedSkills}
+							onChange={handleSkillsChange}
+							required
+						>
+							{skills.map((skill) => (
+								<option key={skill.skill_id} value={skill.skill_id}>
+									{skill.skill_name}
+								</option>
+							))}
+						</select>
+					</div>
+					<button className="form-btn" type="submit">
+						Publish Tender
+					</button>
+				</form>
+			</div>
 		</main>
 	);
 };
