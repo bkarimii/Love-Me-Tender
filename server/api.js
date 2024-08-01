@@ -57,9 +57,7 @@ const auth = async (req, res, next) => {
 	}
 };
 
-// router.use(auth);
-const authRout = Router();
-authRout.use(auth);
+router.use(auth);
 
 router.get("/", (_, res) => {
 	res.status(200).json({ message: "WELCOME TO LOVE ME TENDER SITE" });
@@ -110,10 +108,8 @@ router.post("/signup", async (req, res) => {
 		errors.push("Invalid email format");
 	}
 
-	if (!["bidder", "contractor"].includes(userType)) {
-		errors.push(
-			"Invalid user type. Allowed values are 'bidder' and 'contractor'"
-		);
+	if (!["bidder", "buyer"].includes(userType)) {
+		errors.push("Invalid user type. Allowed values are 'bidder' and 'buyer'");
 	}
 
 	if (!firstName) {
@@ -124,16 +120,13 @@ router.post("/signup", async (req, res) => {
 		errors.push("Last name is required");
 	}
 
-	if (userType === "contractor" && (!company || !description || !address)) {
-		errors.push(
-			"Company, description, and address are required for contractors"
-		);
+	if (userType === "buyer" && (!company || !description || !address)) {
+		errors.push("Company, description, and address are required for buyers");
 	}
 
 	if (errors.length > 0) {
 		return res.status(400).json({
-			message: "Validation errors",
-			errors: errors,
+			code: "VALIDATION_ERROR",
 		});
 	}
 
@@ -159,17 +152,16 @@ router.post("/signup", async (req, res) => {
 			userTableQuery =
 				"INSERT INTO bidder (user_id, first_name, last_name, last_update) VALUES ($1, $2, $3, NOW())";
 			userTableValues = [userId, firstName, lastName];
-		} else if (userType === "contractor") {
+		} else if (userType === "buyer") {
 			userTableQuery =
-				"INSERT INTO contractor (user_id, company, description, address, last_update) VALUES ($1, $2, $3, $4, NOW())";
+				"INSERT INTO buyer (user_id, company, description, address, last_update) VALUES ($1, $2, $3, $4, NOW())";
 			userTableValues = [userId, company, description, address];
 		} else {
 			await client.query("ROLLBACK");
-			return res.status(400).json({});
+			return res.status(500).json({ code: "SERVER_ERROR" });
 		}
 
 		await client.query(userTableQuery, userTableValues);
-
 		await client.query("COMMIT");
 		res.status(201).json({});
 	} catch (error) {
