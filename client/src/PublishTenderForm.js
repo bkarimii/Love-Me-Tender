@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PublishTenderForm.css";
+import { get, post } from "./TenderClient";
 import "./styles.css";
 import Logo from "./assets/images/CTY-logo-rectangle.png";
 
@@ -16,8 +17,7 @@ const PublishTenderForm = () => {
 	useEffect(() => {
 		const fetchSkills = async () => {
 			try {
-				const response = await fetch("/api/skills");
-				const data = await response.json();
+				const data = await get("/api/skills");
 				setSkills(data.results);
 				setErrors([]);
 			} catch (error) {
@@ -106,18 +106,7 @@ const PublishTenderForm = () => {
 					selectedSkills,
 				};
 
-				const response = await fetch("/api/tender", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
-				});
-
-				if (!response.ok) {
-					const errorData = await response.json();
-					throw new Error(errorData.error || "Failed to publish tender.");
-				}
+				await post("api/tender", formData);
 
 				setTitle("");
 				setDescription("");

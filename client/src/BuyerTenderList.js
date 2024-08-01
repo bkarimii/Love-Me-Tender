@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { get } from "./TenderClient";
 
 const BuyerTenderList = () => {
 	const [loading, setLoading] = useState(true);
@@ -12,11 +13,7 @@ const BuyerTenderList = () => {
 	useEffect(() => {
 		const fetchBuyerTenders = async () => {
 			try {
-				const response = await fetch("api/buyer-tender?page=1");
-				if (!response.ok) {
-					throw new Error("Problem with the server!");
-				}
-				const data = await response.json();
+				const data = await get("api/buyer-tender?page=1");
 				setLoading(false);
 				setBuyerTenders(data.results);
 			} catch (error) {

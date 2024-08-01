@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/images/CTY-logo-rectangle.png";
+import { post } from "../TenderClient";
 import "./LogInForm.css";
 
 function LogInForm() {
@@ -21,16 +22,8 @@ function LogInForm() {
 
 	async function postLogInDeatils(userData) {
 		try {
-			const response = await fetch("/api/sign-in", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(userData),
-			});
-			const data = await response.json();
-			if (response.ok) {
-				const { token, user_type } = data.resource;
+			const data = await post("/api/sign-in", userData);
+			const { token, user_type } = data.resource;
 
 				localStorage.setItem("authToken", token);
 				localStorage.setItem("userType", user_type);
@@ -45,20 +38,17 @@ function LogInForm() {
 					default:
 						navigate("/bidder-dashboard");
 				}
-			} else {
-				switch (response.status) {
-					case 401:
-						setErrorMessage("Incorrect password or email.");
-						break;
-					case 500:
-						setErrorMessage("Internal server error. Please try again later.");
-						break;
-					default:
-						setErrorMessage("An error occurred. Please try again.");
-				}
-			}
 		} catch (error) {
-			setErrorMessage("Unknown Error happened try again later.");
+			switch (error.status) {
+				case 401:
+					setErrorMessage("Incorrect password or email.");
+					break;
+				case 500:
+					setErrorMessage("Internal server error. Please try again later.");
+					break;
+				default:
+					setErrorMessage("An error occurred. Please try again.");
+			}
 		}
 	}
 

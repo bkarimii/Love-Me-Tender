@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { get } from "./TenderClient";
 
 const TendersList = () => {
 	const { pageNumber } = useParams();
@@ -17,13 +18,8 @@ const TendersList = () => {
 	const fetchTenders = async (page) => {
 		setLoading(true);
 		try {
-			const response = await fetch(`/api/tenders?page=${page}`);
-			if (!response.ok) {
-				throw new Error("Failed to fetch tenders. Please try again later.");
-			}
-			const data = await response.json();
-
-			if (data.results && data.pagination) {
+			const data = await get(`/api/tenders?page=${page}`);
+			if (data && data.results && data.pagination) {
 				setTenders(data.results);
 				setPagination(data.pagination);
 				setError(null);

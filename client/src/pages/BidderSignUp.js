@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { post } from "../TenderClient";
 
 function BidderSignUp() {
 	const [bidderDetails, setBidderDetails] = useState({
@@ -13,14 +14,8 @@ function BidderSignUp() {
 
 	async function postBidderDeatils(userData) {
 		try {
-			const response = await fetch("/mock-api", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(userData),
-			});
-			if (!response.ok) {
+			const data = await post("/mock-api", userData);
+			if (data.success) {
 				setRegisterStatus("Registration failed!");
 			}
 			setRegisterStatus("Registered successfully!");

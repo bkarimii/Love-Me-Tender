@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { post } from "../TenderClient";
 
 function ContractorSignUp() {
 	const [contractorDetails, setContractorDetails] = useState({
@@ -14,14 +15,8 @@ function ContractorSignUp() {
 
 	async function postContractorDetails(userData) {
 		try {
-			const response = await fetch("/mock-api", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(userData),
-			});
-			if (response.ok) {
+			const data = await post("/mock-api", userData);
+			if (data.success) {
 				setRegisterStatus("Successfully registered.");
 			}
 			setRegisterStatus("Registration failed!");
