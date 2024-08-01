@@ -6,7 +6,7 @@ import BidderBiddingList from "./BidderBiddingList";
 import SignUp from "./pages/SignUp";
 import AdminDashboard from "./pages/AdminDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
-import BidderDashboard from "./BidderDashboard";
+import BidderDashboard from "./pages/BidderDashboard";
 import TendersList from "./TenderList";
 import Header from "./Header";
 import Footer from "./Footer";
