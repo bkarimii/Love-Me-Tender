@@ -25,19 +25,19 @@ function LogInForm() {
 			const data = await post("/api/sign-in", userData);
 			const { token, user_type } = data.resource;
 
-				localStorage.setItem("authToken", token);
-				localStorage.setItem("userType", user_type);
+			localStorage.setItem("authToken", token);
+			localStorage.setItem("userType", user_type);
 
-				switch (user_type) {
-					case "admin":
-						navigate("/admin-dashboard");
-						break;
-					case "buyer":
-						navigate("/buyer-dashboard");
-						break;
-					default:
-						navigate("/bidder-dashboard");
-				}
+			switch (user_type) {
+				case "admin":
+					navigate("/admin-dashboard");
+					break;
+				case "buyer":
+					navigate("/buyer-dashboard");
+					break;
+				default:
+					navigate("/bidder-dashboard");
+			}
 		} catch (error) {
 			switch (error.status) {
 				case 401:
