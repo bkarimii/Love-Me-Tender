@@ -7,7 +7,16 @@ const itemsPerPage = 25;
 const router = Router();
 
 const allowlist = {
-	POST: ["/sign-in"],
+	POST: {
+		"/sign-in": "public",
+		"/tender": "buyer",
+	},
+	GET: {
+		"/skills": "token",
+		"/buyer-tender": "token",
+		"/bidder-bid": "token",
+		"/tenders": "token",
+	},
 };
 
 const auth = async (req, res, next) => {
@@ -15,7 +24,9 @@ const auth = async (req, res, next) => {
 		const method = req.method.toUpperCase();
 		const path = req.path;
 
-		if (allowlist[method] && allowlist[method].includes(path)) {
+		const allowedAccess = allowlist[method] && allowlist[method][path];
+
+		if (allowedAccess === "public") {
 			return next();
 		}
 
@@ -51,7 +62,16 @@ const auth = async (req, res, next) => {
 		}
 
 		req.user = user;
-		next();
+
+		if (user.role === "admin") {
+			return next();
+		}
+
+		if (allowedAccess === user.role) {
+			return next();
+		}
+
+		return res.status(403).json({ code: "FORBIDDEN" });
 	} catch (error) {
 		res.status(500).json({ code: "SERVER_ERROR" });
 	}
