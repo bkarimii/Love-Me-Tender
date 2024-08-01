@@ -3,7 +3,7 @@ import axios from "axios";
 const getToken = () => localStorage.getItem("authToken");
 
 const client = axios.create({
-	baseURL: "http://localhost:3000",
+	baseURL: "/",
 	headers: {
 		"Content-Type": "application/json",
 	},
