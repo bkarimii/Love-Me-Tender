@@ -1,7 +1,7 @@
 import React from "react";
 import TendersList from "../TenderList";
 
-const AdminDashboard = () => {
+const BidderDashboard = () => {
 	return (
 		<main>
 			<h1>Tenders</h1>
@@ -10,4 +10,4 @@ const AdminDashboard = () => {
 	);
 };
 
-export default AdminDashboard;
+export default BidderDashboard;
