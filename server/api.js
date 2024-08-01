@@ -127,6 +127,7 @@ router.post("/signup", async (req, res) => {
 	if (errors.length > 0) {
 		return res.status(400).json({
 			code: "VALIDATION_ERROR",
+			errors: errors,
 		});
 	}
 
