@@ -63,6 +63,107 @@ router.get("/", (_, res) => {
 	res.status(200).json({ message: "WELCOME TO LOVE ME TENDER SITE" });
 });
 
+function generateRandomPassword(length = 8) {
+	const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+	const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const numbers = "0123456789";
+	const specialChars = "!@#$%^&*()_-+=";
+
+	const allChars = lowerCase + upperCase + numbers + specialChars;
+
+	let password = "";
+	password += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length));
+	password += upperCase.charAt(Math.floor(Math.random() * upperCase.length));
+	password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+	password += specialChars.charAt(
+		Math.floor(Math.random() * specialChars.length)
+	);
+
+	for (let i = 4; i < length; i++) {
+		password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+	}
+
+	password = password
+		.split("")
+		.sort(() => 0.5 - Math.random())
+		.join("");
+
+	return password;
+}
+
+router.post("/signup", async (req, res) => {
+	const {
+		email,
+		userType,
+		firstName,
+		lastName,
+		userName,
+		company,
+		address,
+		description,
+	} = req.body;
+
+	if (!email || !userType || !firstName || !lastName) {
+		return res.status(400).json({
+			message: "Email, userType, firstName, and lastName are required",
+		});
+	}
+
+	const client = await pool.connect();
+
+	try {
+		await client.query("BEGIN");
+
+		const password = generateRandomPassword();
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		const userQuery =
+			"INSERT INTO users (email, password_hash, user_type) VALUES ($1, $2, $3) RETURNING id";
+		const userValues = [email, hashedPassword, userType];
+
+		const userResult = await client.query(userQuery, userValues);
+		const userId = userResult.rows[0].id;
+
+		let userTableQuery;
+		let userTableValues;
+
+		if (userType === "bidder") {
+			if (!userName) {
+				await client.query("ROLLBACK");
+				return res
+					.status(400)
+					.json({ message: "Username is required for bidders" });
+			}
+			userTableQuery =
+				"INSERT INTO bidder (user_id, user_name, first_name, last_name, last_update) VALUES ($1, $2, $3, $4, NOW())";
+			userTableValues = [userId, userName, firstName, lastName];
+		} else if (userType === "buyer") {
+			if (!company || !description || !address) {
+				await client.query("ROLLBACK");
+				return res.status(400).json({
+					message: "Company, description, and address are required for buyers",
+				});
+			}
+			userTableQuery =
+				"INSERT INTO buyer (user_id, company, description, address, last_update) VALUES ($1, $2, $3, $4, NOW())";
+			userTableValues = [userId, company, description, address];
+		} else {
+			await client.query("ROLLBACK");
+			return res.status(400).json({ message: "Unknown userType" });
+		}
+
+		await client.query(userTableQuery, userTableValues);
+
+		await client.query("COMMIT");
+		res.status(201).json({ message: "User registered successfully" });
+	} catch (error) {
+		await client.query("ROLLBACK");
+		res.status(500).json({ message: "Server error: " + error.message });
+	} finally {
+		client.release();
+	}
+});
+
 router.get("/skills", async (req, res) => {
 	try {
 		const result = await db.query(
