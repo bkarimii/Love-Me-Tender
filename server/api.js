@@ -57,13 +57,15 @@ const auth = async (req, res, next) => {
 	}
 };
 
-router.use(auth);
+// router.use(auth);
+const authRout = Router();
+authRout.use(auth);
 
 router.get("/", (_, res) => {
 	res.status(200).json({ message: "WELCOME TO LOVE ME TENDER SITE" });
 });
 
-function generateRandomPassword(length = 8) {
+function generateRandomPassword(length = 12) {
 	const lowerCase = "abcdefghijklmnopqrstuvwxyz";
 	const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const numbers = "0123456789";
@@ -83,12 +85,12 @@ function generateRandomPassword(length = 8) {
 		password += allChars.charAt(Math.floor(Math.random() * allChars.length));
 	}
 
-	password = password
-		.split("")
-		.sort(() => 0.5 - Math.random())
-		.join("");
-
 	return password;
+}
+
+function validateEmail(email) {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return emailRegex.test(email);
 }
 
 router.post("/signup", async (req, res) => {
@@ -97,15 +99,41 @@ router.post("/signup", async (req, res) => {
 		userType,
 		firstName,
 		lastName,
-		userName,
 		company,
 		address,
 		description,
 	} = req.body;
 
-	if (!email || !userType || !firstName || !lastName) {
+	const errors = [];
+
+	if (!validateEmail(email)) {
+		errors.push("Invalid email format");
+	}
+
+	if (!["bidder", "contractor"].includes(userType)) {
+		errors.push(
+			"Invalid user type. Allowed values are 'bidder' and 'contractor'"
+		);
+	}
+
+	if (!firstName) {
+		errors.push("First name is required");
+	}
+
+	if (!lastName) {
+		errors.push("Last name is required");
+	}
+
+	if (userType === "contractor" && (!company || !description || !address)) {
+		errors.push(
+			"Company, description, and address are required for contractors"
+		);
+	}
+
+	if (errors.length > 0) {
 		return res.status(400).json({
-			message: "Email, userType, firstName, and lastName are required",
+			message: "Validation errors",
+			errors: errors,
 		});
 	}
 
@@ -128,37 +156,25 @@ router.post("/signup", async (req, res) => {
 		let userTableValues;
 
 		if (userType === "bidder") {
-			if (!userName) {
-				await client.query("ROLLBACK");
-				return res
-					.status(400)
-					.json({ message: "Username is required for bidders" });
-			}
 			userTableQuery =
-				"INSERT INTO bidder (user_id, user_name, first_name, last_name, last_update) VALUES ($1, $2, $3, $4, NOW())";
-			userTableValues = [userId, userName, firstName, lastName];
-		} else if (userType === "buyer") {
-			if (!company || !description || !address) {
-				await client.query("ROLLBACK");
-				return res.status(400).json({
-					message: "Company, description, and address are required for buyers",
-				});
-			}
+				"INSERT INTO bidder (user_id, first_name, last_name, last_update) VALUES ($1, $2, $3, NOW())";
+			userTableValues = [userId, firstName, lastName];
+		} else if (userType === "contractor") {
 			userTableQuery =
-				"INSERT INTO buyer (user_id, company, description, address, last_update) VALUES ($1, $2, $3, $4, NOW())";
+				"INSERT INTO contractor (user_id, company, description, address, last_update) VALUES ($1, $2, $3, $4, NOW())";
 			userTableValues = [userId, company, description, address];
 		} else {
 			await client.query("ROLLBACK");
-			return res.status(400).json({ message: "Unknown userType" });
+			return res.status(400).json({});
 		}
 
 		await client.query(userTableQuery, userTableValues);
 
 		await client.query("COMMIT");
-		res.status(201).json({ message: "User registered successfully" });
+		res.status(201).json({});
 	} catch (error) {
 		await client.query("ROLLBACK");
-		res.status(500).json({ message: "Server error: " + error.message });
+		res.status(500).json({ code: "SERVER_ERROR" });
 	} finally {
 		client.release();
 	}
@@ -446,7 +462,7 @@ router.post("/bid/:bidId/status", async (req, res) => {
 		if (client) {
 			await client.query("ROLLBACK");
 		}
-		return res.status(500).send({ code: "SERVER_ERROR", error: error.message });
+		return res.status(500).send({ code: "SERVER_ERROR" });
 	} finally {
 		if (client) {
 			client.release();
