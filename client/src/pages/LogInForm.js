@@ -27,6 +27,7 @@ function LogInForm() {
 
 			localStorage.setItem("authToken", token);
 			localStorage.setItem("userType", user_type);
+			window.dispatchEvent(new Event("storage"));
 
 			switch (user_type) {
 				case "admin":

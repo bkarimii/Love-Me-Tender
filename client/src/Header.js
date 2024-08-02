@@ -7,13 +7,20 @@ import { post } from "./TenderClient";
 import "./Header.css";
 
 const Header = () => {
-	const [role, setRole] = useState(null);
+	const [role, setRole] = useState(localStorage.getItem("userType") || null);
 	const [errMsg, setErrMsg] = useState(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const userType = localStorage.getItem("userType");
-		setRole(userType);
+		const storageEventHandler = () => {
+			setRole(localStorage.getItem("userType"));
+		};
+
+		window.addEventListener("storage", storageEventHandler);
+
+		return () => {
+			window.removeEventListener("storage", storageEventHandler);
+		};
 	}, []);
 
 	const handleLogout = async (e) => {
@@ -21,7 +28,7 @@ const Header = () => {
 		try {
 			const response = await post("/api/logout");
 
-			if (response.ok) {
+			if (response) {
 				localStorage.removeItem("token");
 				localStorage.removeItem("userType");
 				navigate("/");
