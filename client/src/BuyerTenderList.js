@@ -7,7 +7,7 @@ const BuyerTenderList = () => {
 	const [errorMsg, setErrorMsg] = useState(null);
 
 	function dateFormat(date) {
-		return date.split("T")[0];
+		return date ? date.split("T")[0] : "N/A";
 	}
 
 	useEffect(() => {

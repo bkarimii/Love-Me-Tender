@@ -18,6 +18,7 @@ const allowlist = {
 		"/buyer-tender": "token",
 		"/bidder-bid": "token",
 		"/tenders": "token",
+		"/bid": "token",
 	},
 };
 
@@ -390,32 +391,58 @@ router.get("/tenders", async (req, res) => {
 });
 
 router.get("/bid", async (req, res) => {
-	const tenderID = parseInt(req.query.tender_id);
-	let page = parseInt(req.query.page) || 1;
-	const itemsPerPage = 10;
+	try {
+		const userId = req.user.id;
+		const userRole = req.user.user_type;
+		const tenderID = parseInt(req.query.tender_id);
+		let page = parseInt(req.query.page) || 1;
+		const itemsPerPage = 10;
+		const offset = (page - 1) * itemsPerPage;
+		let totalBidsQuery;
+		let totalBidsParams;
+		let bidsQuery;
+		let bidsParams;
 
-	const totalBidsPerTender = await db.query(
-		"SELECT COUNT(tender_id) FROM bid WHERE tender_id = $1",
-		[tenderID]
-	);
-	const totalPages = Math.ceil(totalBidsPerTender.rows[0].count / itemsPerPage);
-	const offset = (page - 1) * itemsPerPage;
+		if (userRole === "bidder") {
+			totalBidsQuery =
+				"SELECT COUNT(*) FROM bid WHERE bidder_id = $1 AND tender_id = $2";
+			totalBidsParams = [userId, tenderID];
+			bidsQuery =
+				"SELECT * FROM bid WHERE bidder_id = $1 AND tender_id = $2 LIMIT $3 OFFSET $4";
+			bidsParams = [userId, tenderID, itemsPerPage, offset];
+		} else if (userRole === "buyer") {
+			totalBidsQuery = `
+				SELECT COUNT(*) FROM bid 
+				JOIN tender ON bid.tender_id = tender.id 
+				WHERE tender.buyer_id = $1 AND bid.tender_id = $2
+			`;
+			totalBidsParams = [userId, tenderID];
+			bidsQuery = `
+				SELECT bid.* FROM bid 
+				JOIN tender ON bid.tender_id = tender.id
+				WHERE tender.buyer_id = $1 AND bid.tender_id = $2
+				LIMIT $3 OFFSET $4
+			`;
+			bidsParams = [userId, tenderID, itemsPerPage, offset];
+		} else {
+			return res.status(403).json({ code: "FORBIDDEN" });
+		}
 
-	const totalBidsResults = await db.query(
-		"SELECT * FROM bid WHERE tender_id = $1 LIMIT $2 OFFSET $3",
-		[tenderID, itemsPerPage, offset]
-	);
+		const totalBidsResult = await db.query(totalBidsQuery, totalBidsParams);
+		const totalPages = Math.ceil(totalBidsResult.rows[0].count / itemsPerPage);
+		const bidsResult = await db.query(bidsQuery, bidsParams);
 
-	totalBidsResults
-		? res.send({
-				results: totalBidsResults.rows,
-				pagination: {
-					itemsPerPage: 10,
-					currentPage: page,
-					totalPages: totalPages,
-				},
-		  })
-		: res.status(500).send({ code: "SERVER_ERROR" });
+		res.send({
+			results: bidsResult.rows,
+			pagination: {
+				itemsPerPage: itemsPerPage,
+				currentPage: page,
+				totalPages: totalPages,
+			},
+		});
+	} catch (error) {
+		res.status(500).json({ code: "SERVER_ERROR" });
+	}
 });
 
 router.post("/bid/:bidId/status", async (req, res) => {
