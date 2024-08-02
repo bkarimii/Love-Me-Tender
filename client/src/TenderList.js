@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { get } from "./TenderClient";
+import "./TenderList.css";
 
 const TendersList = () => {
 	const { pageNumber } = useParams();
@@ -50,10 +51,10 @@ const TendersList = () => {
 	};
 
 	return (
-		<div>
+		<div className="tenders-container">
 			<h2>Tenders List</h2>
-			{error && <p style={{ color: "red" }}>{error}</p>}
-			<table>
+			{error && <p className="error-message">{error}</p>}
+			<table className="tenders-table">
 				<thead>
 					<tr>
 						<th>Tender ID</th>
@@ -78,7 +79,7 @@ const TendersList = () => {
 				</tbody>
 			</table>
 			{loading && <p>Loading...</p>}
-			<div>
+			<div className="pagination-buttons">
 				{pagination.currentPage > 1 && (
 					<button onClick={loadPreviousPage} disabled={loading}>
 						Previous Page
