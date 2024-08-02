@@ -75,6 +75,10 @@ const auth = async (req, res, next) => {
 			return next();
 		}
 
+		if (allowedAccess === "token") {
+			return next();
+		}
+
 		return res.status(403).json({ code: "FORBIDDEN" });
 	} catch (error) {
 		res.status(500).json({ code: "SERVER_ERROR" });
