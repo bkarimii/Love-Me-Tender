@@ -11,6 +11,7 @@ const allowlist = {
 		"/sign-in": "public",
 		"/tender": "buyer",
 		"/bid": "token",
+		"/logout": "token",
 	},
 	GET: {
 		"/skills": "token",
@@ -554,6 +555,16 @@ router.post("/sign-in", async (req, res) => {
 				user_type: user.user_type,
 			},
 		});
+	} catch (error) {
+		res.status(500).json({ code: "SERVER_ERROR" });
+	}
+});
+
+router.post("/logout", async (req, res) => {
+	try {
+		await db.query("DELETE FROM session WHERE user_id = $1", [req.user.id]);
+
+		res.status(200).json({ code: "LOGOUT_SUCCESS" });
 	} catch (error) {
 		res.status(500).json({ code: "SERVER_ERROR" });
 	}

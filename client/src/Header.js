@@ -1,15 +1,40 @@
 import Logo from "./assets/images/CTY-logo-rectangle.png";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { post } from "./TenderClient";
+
 import "./Header.css";
 
 const Header = () => {
 	const [role, setRole] = useState(null);
+	const [errMsg, setErrMsg] = useState(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const userType = localStorage.getItem("userType");
 		setRole(userType);
 	}, []);
+
+	const handleLogout = async () => {
+		try {
+			const response = await post("/logout");
+
+			if (response.ok) {
+				localStorage.removeItem("token");
+				localStorage.removeItem("userType");
+				navigate("/");
+			} else {
+				setErrMsg("Logout failed");
+			}
+		} catch (error) {
+			setErrMsg("Failed to logout. Try again!");
+		}
+	};
+
+	if (errMsg != null) {
+		<div>Error: {errMsg}</div>;
+	}
 
 	return (
 		<header className="header">
@@ -32,6 +57,15 @@ const Header = () => {
 							activeClassName="active"
 						>
 							Grant Access
+						</NavLink>
+						<NavLink
+							exact
+							to="/logout"
+							className="nav-link"
+							activeClassName="active"
+							onClick={handleLogout}
+						>
+							Logout
 						</NavLink>
 					</>
 				)}
@@ -62,6 +96,15 @@ const Header = () => {
 						>
 							Publish Tenders
 						</NavLink>
+						<NavLink
+							exact
+							to="/logout"
+							className="nav-link"
+							activeClassName="active"
+							onClick={handleLogout}
+						>
+							Logout
+						</NavLink>
 					</>
 				)}
 
@@ -82,6 +125,15 @@ const Header = () => {
 							activeClassName="active"
 						>
 							My bids
+						</NavLink>
+						<NavLink
+							exact
+							to="/logout"
+							className="nav-link"
+							activeClassName="active"
+							onClick={handleLogout}
+						>
+							Logout
 						</NavLink>
 					</>
 				)}
