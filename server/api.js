@@ -2,6 +2,7 @@ import { Router } from "express";
 import db, { pool } from "./db";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import mail from "./mail";
 
 const itemsPerPage = 25;
 const router = Router();
@@ -193,6 +194,22 @@ router.post("/signup", async (req, res) => {
 
 		await client.query(userTableQuery, userTableValues);
 		await client.query("COMMIT");
+
+		const subject = "Welcome to Love Me Tender!";
+		const message = `
+            <h1>Welcome to Our Service</h1>
+            <p>Your account has been created successfully.</p>
+            <p>Your login details are:</p>
+            <p>Email: ${email}</p>
+            <p>Password: ${password}</p> 
+        `;
+
+		await mail.sendEmail({
+			recipient: email,
+			subject,
+			message,
+		});
+
 		res.status(201).json({});
 	} catch (error) {
 		await client.query("ROLLBACK");
