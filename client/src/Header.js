@@ -1,6 +1,5 @@
 import Logo from "./assets/images/CTY-logo-rectangle.png";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { post } from "./TenderClient";
 
@@ -10,6 +9,9 @@ const Header = () => {
 	const [role, setRole] = useState(localStorage.getItem("userType") || null);
 	const [errMsg, setErrMsg] = useState(null);
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	console.log(location, "location");
 
 	useEffect(() => {
 		const storageEventHandler = () => {
@@ -54,7 +56,7 @@ const Header = () => {
 						<>
 							<NavLink
 								exact
-								to="/list-tenders"
+								to="/dashboard"
 								className="nav-link"
 								activeClassName="active"
 							>
@@ -84,7 +86,7 @@ const Header = () => {
 						<>
 							<NavLink
 								exact
-								to="/list-tenders"
+								to="/dashboard"
 								className="nav-link"
 								activeClassName="active"
 							>
@@ -122,7 +124,7 @@ const Header = () => {
 						<>
 							<NavLink
 								exact
-								to="/list-tenders"
+								to="/dashboard"
 								className="nav-link"
 								activeClassName="active"
 							>

@@ -29,16 +29,7 @@ function LogInForm() {
 			localStorage.setItem("userType", user_type);
 			window.dispatchEvent(new Event("storage"));
 
-			switch (user_type) {
-				case "admin":
-					navigate("/admin-dashboard");
-					break;
-				case "buyer":
-					navigate("/buyer-dashboard");
-					break;
-				default:
-					navigate("/bidder-dashboard");
-			}
+			navigate("/dashboard");
 		} catch (error) {
 			switch (error.status) {
 				case 401:

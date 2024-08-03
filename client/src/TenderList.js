@@ -40,13 +40,13 @@ const TendersList = () => {
 
 	const loadNextPage = () => {
 		if (pagination.currentPage < pagination.totalPages && !loading) {
-			navigate(`/list-tenders/page/${pagination.currentPage + 1}`);
+			navigate(`/dashboard/page/${pagination.currentPage + 1}`);
 		}
 	};
 
 	const loadPreviousPage = () => {
 		if (pagination.currentPage > 1 && !loading) {
-			navigate(`/list-tenders/page/${pagination.currentPage - 1}`);
+			navigate(`/dashboard/page/${pagination.currentPage - 1}`);
 		}
 	};
 

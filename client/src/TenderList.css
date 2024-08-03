@@ -38,6 +38,7 @@
 }
 
 .pagination-buttons button {
+	display: inline-block;
 	padding: 10px 20px;
 	margin: 0 5px;
 	border: none;

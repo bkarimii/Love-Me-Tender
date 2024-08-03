@@ -1,7 +1,7 @@
 import React from "react";
 import TendersList from "../TenderList";
 
-export function BuyerDashboard() {
+export function Dashboard() {
 	return (
 		<main role="main">
 			<div>
@@ -12,4 +12,4 @@ export function BuyerDashboard() {
 	);
 }
 
-export default BuyerDashboard;
+export default Dashboard;
