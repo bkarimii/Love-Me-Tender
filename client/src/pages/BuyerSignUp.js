@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { post } from "../TenderClient";
 
-function ContractorSignUp() {
-	const [contractorDetails, setContractorDetails] = useState({
-		userType: "contractor",
+function BuyerSignUp() {
+	const [buyerDetails, setBuyerDetails] = useState({
+		userType: "buyer",
 		firstName: "",
 		lastName: "",
 		email: "",
@@ -13,7 +13,7 @@ function ContractorSignUp() {
 	// This variable shows success of the request to during sign up that comes back from server
 	const [resgisterStatus, setRegisterStatus] = useState("");
 
-	async function postContractorDetails(userData) {
+	async function postBuyerDetails(userData) {
 		try {
 			const data = await post("/mock-api", userData);
 			if (data.success) {
@@ -27,7 +27,7 @@ function ContractorSignUp() {
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setContractorDetails((prevDetails) => ({
+		setBuyerDetails((prevDetails) => ({
 			...prevDetails,
 			[name]: value,
 		}));
@@ -35,7 +35,7 @@ function ContractorSignUp() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		postContractorDetails(contractorDetails);
+		postBuyerDetails(buyerDetails);
 	};
 
 	return (
@@ -49,7 +49,7 @@ function ContractorSignUp() {
 							id="first-name"
 							name="firstName"
 							placeholder="Enter your first name"
-							value={contractorDetails.firstName}
+							value={buyerDetails.firstName}
 							onChange={handleInputChange}
 							required
 						/>
@@ -61,7 +61,7 @@ function ContractorSignUp() {
 							id="last-name"
 							name="lastName"
 							placeholder="Enter your last name"
-							value={contractorDetails.lastName}
+							value={buyerDetails.lastName}
 							onChange={handleInputChange}
 							required
 						/>
@@ -73,7 +73,7 @@ function ContractorSignUp() {
 							id="email"
 							name="email"
 							placeholder="Enter your email address"
-							value={contractorDetails.email}
+							value={buyerDetails.email}
 							onChange={handleInputChange}
 							required
 						/>
@@ -85,7 +85,7 @@ function ContractorSignUp() {
 							id="company"
 							name="company"
 							placeholder="Enter your company name"
-							value={contractorDetails.company}
+							value={buyerDetails.company}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -96,7 +96,7 @@ function ContractorSignUp() {
 							id="address"
 							name="address"
 							placeholder="Enter your address"
-							value={contractorDetails.address}
+							value={buyerDetails.address}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -110,4 +110,4 @@ function ContractorSignUp() {
 	);
 }
 
-export default ContractorSignUp;
+export default BuyerSignUp;
