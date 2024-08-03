@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BidderSignUp from "./BidderSignUp";
-import ContractorSignUp from "./ContractorSignUp";
+import BuyerSignUp from "./BuyerSignUp";
 
 function SignUp() {
 	const [userType, setUserType] = useState("");
@@ -34,11 +34,11 @@ function SignUp() {
 							<input
 								type="radio"
 								name="user"
-								value="contractor"
-								checked={userType === "contractor"}
+								value="buyer"
+								checked={userType === "buyer"}
 								onChange={handleChangeRdaio}
 							/>
-							<label htmlFor="contractor">Contractor</label>
+							<label htmlFor="buyer">Buyer</label>
 						</div>
 						<div>
 							<input
@@ -57,7 +57,7 @@ function SignUp() {
 				)}
 			</div>
 			<div>{userType === "bidder" && showForm && <BidderSignUp />}</div>
-			<div>{userType === "contractor" && showForm && <ContractorSignUp />}</div>
+			<div>{userType === "buyer" && showForm && <BuyerSignUp />}</div>
 		</>
 	);
 }
