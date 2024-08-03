@@ -15,7 +15,7 @@ function BuyerSignUp() {
 
 	async function postBuyerDetails(userData) {
 		try {
-			const data = await post("/mock-api", userData);
+			const data = await post("/api/signup", userData);
 			if (data.success) {
 				setRegisterStatus("Successfully registered.");
 			}

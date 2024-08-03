@@ -14,7 +14,7 @@ function BidderSignUp() {
 
 	async function postBidderDeatils(userData) {
 		try {
-			const data = await post("/mock-api", userData);
+			const data = await post("/api/signup", userData);
 			if (data.success) {
 				setRegisterStatus("Registration failed!");
 			}
