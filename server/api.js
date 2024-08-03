@@ -39,7 +39,7 @@ const auth = async (req, res, next) => {
 		const token = authHeader?.split(" ")[1];
 
 		if (!token) {
-			return res.status(401).json({ code: "UNAUTHRIZED" });
+			return res.status(401).json({ code: "UNAUTHORIZED" });
 		}
 
 		const sessionResult = await db.query(
@@ -49,7 +49,7 @@ const auth = async (req, res, next) => {
 		const session = sessionResult.rows[0];
 
 		if (!session) {
-			return res.status(401).json({ code: "UNAUTHRIZED" });
+			return res.status(401).json({ code: "UNAUTHORIZED" });
 		}
 
 		const currentTime = new Date();

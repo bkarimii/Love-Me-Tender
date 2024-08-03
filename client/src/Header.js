@@ -29,7 +29,7 @@ const Header = () => {
 			const response = await post("/api/logout");
 
 			if (response) {
-				localStorage.removeItem("token");
+				localStorage.removeItem("authToken");
 				localStorage.removeItem("userType");
 				navigate("/");
 				setRole(null);

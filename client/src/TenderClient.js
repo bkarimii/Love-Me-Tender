@@ -20,7 +20,8 @@ client.interceptors.request.use((config) => {
 const handleAuthError = (error) => {
 	if (error.response && error.response.status === 401) {
 		localStorage.removeItem("authToken");
-		window.location.href = "/sign-in";
+		localStorage.removeItem("userType");
+		window.location.href = "/";
 	} else {
 		throw error;
 	}
