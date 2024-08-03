@@ -72,7 +72,7 @@ const auth = async (req, res, next) => {
 			return next();
 		}
 
-		if (allowedAccess === user.role) {
+		if (user.user_type === allowedAccess) {
 			return next();
 		}
 
