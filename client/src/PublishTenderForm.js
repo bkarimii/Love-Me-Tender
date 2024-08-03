@@ -140,7 +140,7 @@ const PublishTenderForm = () => {
 						</ul>
 					</div>
 				)}
-				<form className="form" onSubmit={handleSubmit}>
+				<form className="form-publish" onSubmit={handleSubmit}>
 					<div className="form-label">
 						<label htmlFor="title">Tender Title:</label>
 						<input
