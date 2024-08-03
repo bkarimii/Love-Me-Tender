@@ -61,3 +61,14 @@ Then run above command again.
 ```sh
 node ../node_modules/db-migrate/bin/db-migrate create name-for-the-migration --sql-file
 ```
+
+## User Sign-Up Password Emailing
+
+To configure the SMTP server, add the following variables to your .env file and set their values based on your provider:
+
+MAIL_HOST=<your_smtp_host>
+MAIL_PORT=<your_smtp_port>
+MAIL_USER=<your_smtp_user>
+MAIL_PASSWORD=<your_smtp_password>
+
+Replace <your_smtp_host>, <your_smtp_port>, <your_smtp_user>, and <your_smtp_password> with the appropriate values provided by your SMTP service.
