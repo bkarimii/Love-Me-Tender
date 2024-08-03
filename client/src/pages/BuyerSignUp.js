@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { post } from "../TenderClient";
 
 function BuyerSignUp() {
-	const [buyerDetails, setbuyerDetails] = useState({
+	const [buyerDetails, setBuyerDetails] = useState({
 		userType: "buyer",
 		firstName: "",
 		lastName: "",
@@ -13,7 +13,7 @@ function BuyerSignUp() {
 	// This variable shows success of the request to during sign up that comes back from server
 	const [resgisterStatus, setRegisterStatus] = useState("");
 
-	async function postbuyerDetails(userData) {
+	async function postBuyerDetails(userData) {
 		try {
 			const data = await post("/mock-api", userData);
 			if (data.success) {
@@ -27,7 +27,7 @@ function BuyerSignUp() {
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setbuyerDetails((prevDetails) => ({
+		setBuyerDetails((prevDetails) => ({
 			...prevDetails,
 			[name]: value,
 		}));
@@ -35,7 +35,7 @@ function BuyerSignUp() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		postbuyerDetails(buyerDetails);
+		postBuyerDetails(buyerDetails);
 	};
 
 	return (
