@@ -8,12 +8,20 @@ import Dashboard from "./pages/Dashboard";
 import TendersList from "./TenderList";
 import Header from "./Header";
 import Footer from "./Footer";
+import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => (
 	<>
 		<Header className="header" />
 		<Routes>
-			<Route path="/" element={<Home />} />
+			<Route
+				path="/"
+				element={
+					<ProtectedRoute>
+						<Home />
+					</ProtectedRoute>
+				}
+			/>
 			<Route path="/publish-tender" element={<PublishTenderForm />} />
 			<Route path="/BuyerTenderList" element={<BuyerTenderList />} />
 			<Route path="/BidderBiddingList" element={<BidderBiddingList />} />
