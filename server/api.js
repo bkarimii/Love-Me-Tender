@@ -547,6 +547,78 @@ router.post("/bid/:bidId/status", async (req, res) => {
 	}
 });
 
+const validStatuses = ["Active", "Withdrawn", "Awarded", "Rejected"];
+
+router.post("/bid", async (req, res) => {
+	try {
+		const { tenderId, bidding_amount, cover_letter, suggested_duration_days } =
+			req.body;
+		const bidderId = req.user.id;
+		const biddingDate = new Date();
+		const status = "Active";
+
+		if (!validStatuses.includes(status)) {
+			return res.status(400).json({ error: "Invalid bid status" });
+		}
+
+		if (cover_letter && cover_letter.length > 1000) {
+			return res
+				.status(400)
+				.json({ error: "Maximum length is upto 1,000 characters" });
+		}
+
+		if (
+			!suggested_duration_days ||
+			suggested_duration_days < 1 ||
+			suggested_duration_days > 1000
+		) {
+			return res
+				.status(400)
+				.json({ error: "Duration must be between 1 and 1,000 days" });
+		}
+
+		if (!bidding_amount || isNaN(bidding_amount) || bidding_amount <= 0) {
+			return res.status(400).json({ error: "Input a valid amount" });
+		}
+
+		const client = await pool.connect();
+
+		try {
+			await client.query("BEGIN");
+
+			const bidQuery = `
+				INSERT INTO bid (tender_id, bidder_id, bidding_date, status, bidding_amount, cover_letter, suggested_duration_days)
+				VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING bid_id
+			`;
+
+			const bidValues = [
+				tenderId,
+				bidderId,
+				biddingDate,
+				status,
+				bidding_amount,
+				cover_letter || null,
+				suggested_duration_days,
+			];
+
+			const bidResult = await client.query(bidQuery, bidValues);
+
+			await client.query("COMMIT");
+
+			res.status(201).json({
+				resource: bidResult.rows[0],
+			});
+		} catch (error) {
+			await client.query("ROLLBACK");
+			res.status(500).json({ code: "SERVER_ERROR" });
+		} finally {
+			client.release();
+		}
+	} catch (error) {
+		res.status(500).json({ code: "SERVER_ERROR" });
+	}
+});
+
 router.post("/sign-in", async (req, res) => {
 	const { email, password } = req.body;
 
