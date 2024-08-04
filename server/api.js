@@ -265,8 +265,8 @@ router.post("/tender", async (req, res) => {
 		await client.query("BEGIN");
 
 		const insertTenderQuery = `
-		INSERT INTO tender (title, announcement_date, deadline, description, closing_date)
-		VALUES ($1, $2, $3, $4, $5) RETURNING id
+		INSERT INTO tender (title, announcement_date, deadline, description, closing_date, status)
+		VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
 		`;
 		const tenderResult = await client.query(insertTenderQuery, [
 			title,
@@ -274,6 +274,7 @@ router.post("/tender", async (req, res) => {
 			deadlineDate,
 			description,
 			closingDate,
+			"Active",
 		]);
 		const tenderId = tenderResult.rows[0].id;
 
