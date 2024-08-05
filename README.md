@@ -72,3 +72,7 @@ MAIL_USER=<your_smtp_user>
 MAIL_PASSWORD=<your_smtp_password>
 
 Replace <your_smtp_host>, <your_smtp_port>, <your_smtp_user>, and <your_smtp_password> with the appropriate values provided by your SMTP service.
+
+To run the database, add the following variables to your .env file:
+DB_PASSWORD=opensesame
+DB_USERNAME=postgres
