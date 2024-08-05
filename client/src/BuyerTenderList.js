@@ -90,7 +90,7 @@ const BuyerTenderList = () => {
 								<td>{tender.description.substring(0, 200)}</td>
 								<td>{tender.no_of_bids_received}</td>
 								<td>£{tender.cost}</td>
-								<td>{tender.status}</td>
+								<td data-status={tender.status}>{tender.status}</td>
 								<td>{dateFormat(tender.last_update)}</td>
 							</tr>
 						))}

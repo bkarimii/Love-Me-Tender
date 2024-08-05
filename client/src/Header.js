@@ -94,7 +94,7 @@ const Header = () => {
 							</NavLink>
 							<NavLink
 								exact
-								to="/BuyerTenderList"
+								to="/buyer-tender"
 								className="nav-link"
 								activeClassName="active"
 							>

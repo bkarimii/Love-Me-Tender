@@ -52,7 +52,6 @@ const TendersList = () => {
 
 	return (
 		<div className="tenders-container">
-			<h2>Tenders List</h2>
 			{error && <p className="error-message">{error}</p>}
 			<table className="tenders-table">
 				<thead>
@@ -73,7 +72,7 @@ const TendersList = () => {
 							<td>{new Date(tender.creation_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.announcement_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.deadline).toLocaleDateString()}</td>
-							<td>{tender.status}</td>
+							<td data-status={tender.status}>{tender.status}</td>
 						</tr>
 					))}
 				</tbody>

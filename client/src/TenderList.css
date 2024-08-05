@@ -1,6 +1,7 @@
 .tenders-container {
+	width: 100vw;
 	padding: 20px;
-	font-family: Arial, sans-serif;
+	background: #ffffff;
 }
 
 .tenders-table {
@@ -9,19 +10,20 @@
 	margin-bottom: 20px;
 }
 
+.tenders-table th {
+	color: #767676;
+	font-weight: 400;
+	height: 30px;
+	gap: 0px;
+	border: 0px 0px var(--Border-Default);
+	opacity: 0px;
+}
+
 .tenders-table th,
 .tenders-table td {
-	border: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 	padding: 8px;
 	text-align: left;
-}
-
-.tenders-table th {
-	background-color: #f4f4f4;
-}
-
-.tenders-table tr:nth-child(even) {
-	background-color: #f9f9f9;
 }
 
 .tenders-table tr:hover {
@@ -38,16 +40,35 @@
 }
 
 .pagination-buttons button {
-	display: inline-block;
-	padding: 10px 20px;
-	margin: 0 5px;
-	border: none;
-	background-color: #007bff;
-	color: white;
-	cursor: pointer;
+	height: 40px;
+	background: var(--black);
+	border-radius: 8px;
+	margin: 0;
+	color: var(--white);
 }
 
 .pagination-buttons button:disabled {
 	background-color: #ddd;
 	cursor: not-allowed;
+}
+
+.pagination-buttons button:hover,
+.pagination-buttons button:active {
+	background-color: var(--orange);
+}
+
+td[data-status="Active"] {
+	color: #14ae5c;
+}
+
+td[data-status="In review"] {
+	color: #e5a000;
+}
+
+td[data-status="Awarded"] {
+	color: #ec221f;
+}
+
+td[data-status="Closed"] {
+	color: #8a226f;
 }
