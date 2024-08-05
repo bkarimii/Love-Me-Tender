@@ -12,6 +12,7 @@ const allowlist = {
 		"/tender": "buyer",
 		"/bid": "token",
 		"/logout": "token",
+		"/signup": "admin",
 	},
 	GET: {
 		"/skills": "token",
@@ -141,16 +142,12 @@ router.post("/signup", async (req, res) => {
 		errors.push("Invalid user type. Allowed values are 'bidder' and 'buyer'");
 	}
 
-	if (!firstName) {
-		errors.push("First name is required");
+	if (userType === "bidder" && (!firstName || !lastName)) {
+		errors.push("First name and last name are required for buyers");
 	}
 
-	if (!lastName) {
-		errors.push("Last name is required");
-	}
-
-	if (userType === "buyer" && (!company || !description || !address)) {
-		errors.push("Company, description, and address are required for buyers");
+	if (userType === "buyer" && (!company || !address)) {
+		errors.push("Company and address are required for buyers");
 	}
 
 	if (errors.length > 0) {
@@ -164,7 +161,6 @@ router.post("/signup", async (req, res) => {
 
 	try {
 		await client.query("BEGIN");
-
 		const password = generateRandomPassword();
 		const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -173,6 +169,10 @@ router.post("/signup", async (req, res) => {
 		const userValues = [email, hashedPassword, userType];
 
 		const userResult = await client.query(userQuery, userValues);
+
+		if (!userResult.rows[0] || !userResult.rows[0].id) {
+			throw new Error("Failed to insert user into the users table");
+		}
 		const userId = userResult.rows[0].id;
 
 		let userTableQuery;

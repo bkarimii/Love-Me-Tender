@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import PublishTenderForm from "./PublishTenderForm";
 import BuyerTenderList from "./BuyerTenderList";
 import BidderBiddingList from "./BidderBiddingList";
-import SignUp from "./pages/SignUp";
+import GrantAccessForm from "./pages/GrantAccessForm";
 import Dashboard from "./pages/Dashboard";
 import TendersList from "./TenderList";
 import Header from "./Header";
@@ -29,7 +29,7 @@ const App = () => (
 				element={<BuyerTenderList />}
 			/>
 			<Route path="/BidderBiddingList" element={<BidderBiddingList />} />
-			<Route path="/signup" element={<SignUp />} />
+			<Route path="/grant-access" element={<GrantAccessForm />} />
 			<Route path="/dashboard" element={<Dashboard />} />
 			<Route path="/dashboard/page/:pageNumber" element={<TendersList />} />
 		</Routes>
