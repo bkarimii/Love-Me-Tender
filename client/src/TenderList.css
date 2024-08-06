@@ -8,6 +8,7 @@
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: 20px;
+	table-layout: fixed;
 }
 
 .tenders-table th {
@@ -24,6 +25,7 @@
 	border-bottom: 1px solid #ddd;
 	padding: 8px;
 	text-align: left;
+	overflow: hidden;
 }
 
 .tenders-table tr:hover {
@@ -71,4 +73,22 @@ td[data-status="Awarded"] {
 
 td[data-status="Closed"] {
 	color: #8a226f;
+}
+
+.toggle-text {
+	background: none;
+	border: none;
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline;
+	font-size: 0.8em;
+	padding: 0;
+	margin-top: 5px;
+}
+
+.tenders-table td.description {
+	width: 1000px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
 }

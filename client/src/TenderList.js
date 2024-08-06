@@ -14,6 +14,7 @@ const TendersList = () => {
 		totalPages: 1,
 	});
 	const [error, setError] = useState(null);
+	const [expandedTenderId, setExpandedTenderId] = useState(null);
 	const navigate = useNavigate();
 
 	const fetchTenders = async (page) => {
@@ -50,6 +51,17 @@ const TendersList = () => {
 		}
 	};
 
+	const handleTenderClick = (id) => {
+		setExpandedTenderId((prevId) => (prevId === id ? null : id));
+	};
+
+	const truncateText = (text, limit) => {
+		if (text.length <= limit) {
+			return text;
+		}
+		return text.substring(0, limit) + "...";
+	};
+
 	return (
 		<div className="tenders-container">
 			{error && <p className="error-message">{error}</p>}
@@ -58,6 +70,7 @@ const TendersList = () => {
 					<tr>
 						<th>Tender ID</th>
 						<th>Tender Title</th>
+						<th>Description</th>
 						<th>Tender Created Date</th>
 						<th>Tender Announcement Date</th>
 						<th>Tender Project Deadline Date</th>
@@ -69,6 +82,38 @@ const TendersList = () => {
 						<tr key={tender.id}>
 							<td>{tender.id}</td>
 							<td>{tender.title}</td>
+							<td className="description">
+								{expandedTenderId === tender.id ? (
+									<p>
+										{tender.description || "No description available"}
+										<button
+											className="toggle-text"
+											onClick={() => handleTenderClick(tender.id)}
+											aria-expanded={expandedTenderId === tender.id}
+											aria-controls={`description-${tender.id}`}
+										>
+											Show Less
+										</button>
+									</p>
+								) : (
+									<p>
+										{truncateText(
+											tender.description || "No description available",
+											30
+										)}
+										{(tender.description || "").length > 30 && (
+											<button
+												className="toggle-text"
+												onClick={() => handleTenderClick(tender.id)}
+												aria-expanded={expandedTenderId === tender.id}
+												aria-controls={`description-${tender.id}`}
+											>
+												Show More
+											</button>
+										)}
+									</p>
+								)}
+							</td>
 							<td>{new Date(tender.creation_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.announcement_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.deadline).toLocaleDateString()}</td>
