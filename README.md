@@ -70,11 +70,9 @@ DB_USERNAME=postgres
 
 ## SMTP configuration
 
-To configure the SMTP server, add the following variables to your .env file and set their values based on your provider:
-
+To configure the SMTP server, add the following variables to your .env file and set their values according to your service provider:
 MAIL_HOST=<your_smtp_host>
 MAIL_PORT=<your_smtp_port>
 MAIL_USER=<your_smtp_user>
 MAIL_PASSWORD=<your_smtp_password>
-
 Replace <your_smtp_host>, <your_smtp_port>, <your_smtp_user>, and <your_smtp_password> with the appropriate values provided by your SMTP service.
