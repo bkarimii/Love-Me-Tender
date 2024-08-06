@@ -204,6 +204,7 @@ const PublishTenderForm = () => {
 							id="skills"
 							value={selectedSkills}
 							onChange={handleSkillsChange}
+							multiple
 							required
 						>
 							{skills.map((skill) => (
