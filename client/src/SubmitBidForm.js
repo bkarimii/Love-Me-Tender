@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { get, post } from "./TenderClient";
+import "./SubmitBidForm.css";
 
 const SubmitBidForm = () => {
 	const { tenderId } = useParams();
 	const [coverLetter, setCoverLetter] = useState("");
 	const [proposedDuration, setProposedDuration] = useState("");
 	const [proposedBudget, setProposedBudget] = useState("");
+	const [errorStatus, setErrorStatus] = useState("");
 	const [errors, setErrors] = useState([]);
-	const [bidError, setBidError] = useState("");
 	const [tender, setTender] = useState(null);
 	const navigate = useNavigate();
 
@@ -39,56 +40,49 @@ const SubmitBidForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const newErrors = [];
 
 		if (coverLetter.length > 1000) {
-			newErrors.push("Cover Letter must be up to 1,000 characters.");
+			errors.push("Maximum length is upto 1,000 characters");
 		}
 
 		const duration = parseInt(proposedDuration);
 		if (isNaN(duration) || duration < 1 || duration > 1000) {
-			newErrors.push(
-				"Proposed Project Duration must be between 1 and 1,000 days."
-			);
+			errors.push("Duration must be between 1 and 1,000 days");
 		}
 
 		const budget = parseFloat(proposedBudget);
 		if (isNaN(budget) || budget <= 0) {
-			newErrors.push("Proposed Project Budget must be a positive number.");
+			errors.push("Input a valid bidding amount");
 		}
 
-		if (newErrors.length > 0) {
-			setErrors(newErrors);
-		} else {
-			try {
-				const bidData = {
-					tenderId,
-					bidding_amount: budget,
-					cover_letter: coverLetter,
-					suggested_duration_days: duration,
-					bidding_date: new Date(),
-				};
+		try {
+			const bidData = {
+				tenderId,
+				bidding_amount: budget,
+				cover_letter: coverLetter,
+				suggested_duration_days: duration,
+				bidding_date: new Date(),
+			};
 
-				await post("/api/bid", bidData);
-
+			await post("/api/bid", bidData);
+			setErrorStatus(null);
+			setErrors([]);
+			alert("Bid submitted successfully!");
+			navigate("/dashboard");
+		} catch (error) {
+			const { status, data } = error.response;
+			if (status === 400) {
+				setErrorStatus("Validation Error");
+				setErrors(data.errors || []);
+			} else {
+				setErrorStatus("Server Error. Try again later.");
 				setErrors([]);
-				alert("Bid submitted successfully!");
-				navigate("/dashboard");
-			} catch (error) {
-				const { status, data } = error.response;
-				if (status === 400) {
-					setBidError("Validation error");
-					setErrors(data.error);
-				} else {
-					setBidError("Servor error");
-					setErrors(data.error);
-				}
 			}
 		}
 	};
 
 	return (
-		<div className="submit-bid-form-container">
+		<div className="main submit-bid-form-container">
 			{tender ? (
 				<div className="tender-info">
 					<h3>Tender Information</h3>
@@ -122,15 +116,6 @@ const SubmitBidForm = () => {
 				<p>Loading tender details...</p>
 			)}
 			<h2>Submit Bid</h2>
-			{errors.length > 0 && (
-				<div className="error-message">
-					<ul>
-						{errors.map((error, index) => (
-							<li key={index}>{error}</li>
-						))}
-					</ul>
-				</div>
-			)}
 			<form onSubmit={handleSubmit} className="submit-bid-form">
 				<div className="form-group">
 					<label htmlFor="coverLetter">Cover Letter:</label>
@@ -164,9 +149,9 @@ const SubmitBidForm = () => {
 				</div>
 				<button type="submit">Submit Bid</button>
 			</form>
-			{bidError && (
+			{errorStatus && (
 				<div className="message">
-					<p>{bidError}</p>
+					<p>{errorStatus}</p>
 					<ul className="error-list">
 						{errors.map((error, index) => (
 							<li key={index}>{error}</li>

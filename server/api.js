@@ -656,14 +656,14 @@ router.post("/bid", async (req, res) => {
 		const biddingDate = new Date();
 		const status = "Active";
 
+		const errors = [];
+
 		if (!validStatuses.includes(status)) {
-			return res.status(400).json({ error: "Invalid bid status" });
+			res.status(500).json({ code: "SERVER_ERROR" });
 		}
 
 		if (cover_letter && cover_letter.length > 1000) {
-			return res
-				.status(400)
-				.json({ error: "Maximum length is upto 1,000 characters" });
+			errors.push("Maximum length is upto 1,000 characters");
 		}
 
 		if (
@@ -671,13 +671,18 @@ router.post("/bid", async (req, res) => {
 			suggested_duration_days < 1 ||
 			suggested_duration_days > 1000
 		) {
-			return res
-				.status(400)
-				.json({ error: "Duration must be between 1 and 1,000 days" });
+			errors.push("Duration must be between 1 and 1,000 days");
 		}
 
 		if (!bidding_amount || isNaN(bidding_amount) || bidding_amount <= 0) {
-			return res.status(400).json({ error: "Input a valid amount" });
+			errors.push("Input a valid bidding amount");
+		}
+
+		if (errors.length > 0) {
+			return res.status(400).json({
+				code: "VALIDATION_ERROR",
+				errors: errors,
+			});
 		}
 
 		const client = await pool.connect();
