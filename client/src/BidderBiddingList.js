@@ -6,10 +6,6 @@ const BidderBiddingList = () => {
 	const [bidderList, setBidderList] = useState([]);
 	const [errorMsg, setErrorMsg] = useState(null);
 
-	function dateFormat(date) {
-		return date.split("T")[0];
-	}
-
 	useEffect(() => {
 		const fetchBidderBids = async () => {
 			try {
@@ -43,13 +39,15 @@ const BidderBiddingList = () => {
 				{bidderList.map((bid, index) => (
 					<div className="bid-card" key={index}>
 						<p>Status: {bid.status}</p>
-						<p>submitted on: {dateFormat(bid.bidding_date)}</p>
+						<p>
+							submitted on: {new Date(bid.submission_date).toLocaleDateString()}
+						</p>
 						<p>Bidding Amount: {bid.bidding_amount}</p>
 						<div>
 							Cover Letter:
 							<p>{bid.cover_letter}</p>
 						</div>
-						<p>Completion Time: {bid.suggested_duration_days} days</p>
+						<p>Completion Time: {bid.suggested_duration_days}days</p>
 					</div>
 				))}
 			</div>

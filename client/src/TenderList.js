@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { get } from "./TenderClient";
 import "./TenderList.css";
 
@@ -7,6 +7,7 @@ const TendersList = () => {
 	const { pageNumber } = useParams();
 	const currentPage = pageNumber ? parseInt(pageNumber, 10) : 1;
 	const [tenders, setTenders] = useState([]);
+	const [bids, setBids] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [pagination, setPagination] = useState({
 		itemsPerPage: 25,
@@ -16,28 +17,28 @@ const TendersList = () => {
 	const [error, setError] = useState(null);
 	const [expandedTenderId, setExpandedTenderId] = useState(null);
 	const navigate = useNavigate();
+	const role = localStorage.getItem("userType");
 
-	const fetchTenders = async (page) => {
+	const fetchTenders = useCallback(async (page) => {
 		setLoading(true);
 		try {
-			const data = await get(`/api/tenders?page=${page}`);
-			if (data && data.results && data.pagination) {
-				setTenders(data.results);
-				setPagination(data.pagination);
-				setError(null);
-			} else {
-				throw new Error("Server error");
-			}
+			const tenderData = await get(`/api/tenders?page=${page}`);
+			const bidsData = await get("/api/bidder-bid?page=1");
+
+			setTenders(tenderData.results);
+			setBids(bidsData.results);
+			setPagination(tenderData.pagination);
+			setError(null);
 		} catch (error) {
 			setError("Error fetching tenders: " + error.message);
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchTenders(currentPage);
-	}, [currentPage]);
+	}, [fetchTenders, currentPage]);
 
 	const loadNextPage = () => {
 		if (pagination.currentPage < pagination.totalPages && !loading) {
@@ -62,6 +63,10 @@ const TendersList = () => {
 		return text.substring(0, limit) + "...";
 	};
 
+	const hasSubmittedBid = (tenderId) => {
+		return bids.some((bid) => bid.tender_id === tenderId && role === "bidder");
+	};
+
 	return (
 		<div className="tenders-container">
 			{error && <p className="error-message">{error}</p>}
@@ -70,11 +75,19 @@ const TendersList = () => {
 					<tr>
 						<th>Tender ID</th>
 						<th>Tender Title</th>
-						<th>Description</th>
+						<th>Tender Description</th>
 						<th>Tender Created Date</th>
 						<th>Tender Announcement Date</th>
+						<th>Tender Closing Date</th>
 						<th>Tender Project Deadline Date</th>
 						<th>Tender Status</th>
+						<th
+							className={
+								role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
+							}
+						>
+							Actions
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -116,8 +129,22 @@ const TendersList = () => {
 							</td>
 							<td>{new Date(tender.creation_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.announcement_date).toLocaleDateString()}</td>
+							<td>{new Date(tender.closing_date).toLocaleDateString()}</td>
 							<td>{new Date(tender.deadline).toLocaleDateString()}</td>
 							<td data-status={tender.status}>{tender.status}</td>
+							<td
+								className={
+									role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
+								}
+							>
+								{hasSubmittedBid(tender.id) ? (
+									<button disabled>Bid Submitted</button>
+								) : (
+									<Link to={`/tenders/${tender.id}/submit-bid`}>
+										Submit Bid
+									</Link>
+								)}
+							</td>
 						</tr>
 					))}
 				</tbody>

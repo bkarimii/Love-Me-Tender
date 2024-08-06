@@ -92,3 +92,11 @@ td[data-status="Closed"] {
 	text-overflow: ellipsis;
 	white-space: normal;
 }
+
+.showSubmitButton {
+	display: block;
+}
+
+.hideSubmitButton {
+	display: none;
+}
