@@ -390,7 +390,6 @@ router.get("/tenders", async (req, res) => {
 	const page = parseInt(req.query.page, 10) || 1;
 	const limit = 25;
 	const offset = (page - 1) * limit;
-
 	const countSql = "SELECT COUNT(*) FROM tender";
 	const tendersSql = `
 		SELECT id, title, creation_date, announcement_date, deadline, description, status, closing_date
@@ -517,10 +516,14 @@ router.get("/bid", async (req, res) => {
 			`;
 			totalBidsParams = [userId, tenderID];
 			bidsQuery = `
-				SELECT bid.* FROM bid 
+SELECT bid.*, bidder.first_name, bidder.last_name, ba.attachment
+				FROM bid
+				JOIN bidder ON bid.bidder_id = bidder.user_id
 				JOIN tender ON bid.tender_id = tender.id
-				WHERE tender.buyer_id = $1 AND bid.tender_id = $2
-				LIMIT $3 OFFSET $4
+				JOIN bid_attachment as ba ON bid.bid_id = ba.bid_id
+				WHERE tender.buyer_id = $1
+  				AND bid.tender_id = $2
+				LIMIT $3 OFFSET $4;
 			`;
 			bidsParams = [userId, tenderID, itemsPerPage, offset];
 		} else {

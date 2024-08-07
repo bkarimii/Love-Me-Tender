@@ -1,5 +1,5 @@
 .tenders-container {
-	width: 100vw;
+	width: 70vw;
 	padding: 20px;
 	background: #ffffff;
 }
@@ -75,6 +75,82 @@ td[data-status="Closed"] {
 	color: #8a226f;
 }
 
+.tender-id {
+	font-weight: 700;
+}
+
+.tender-id:hover {
+	color: #ec221f;
+	text-decoration: underline;
+}
+
+/*======New UI for Tables=====*/
+
+.container {
+	width: 70vw;
+	padding: 20px;
+	background: none;
+	box-shadow: none;
+	display: grid;
+	gap: 2rem;
+}
+
+.card {
+	background-color: #ffffff;
+	height: auto;
+	border: 1px solid var(--Border-Default);
+	border-radius: var(--Border-radius-Default);
+	padding: 20px;
+	display: grid;
+	gap: 1rem;
+}
+
+.posted-on {
+	color: #757575;
+}
+
+.posted-on-date {
+	font-style: italic;
+}
+
+.cover-letter {
+	background-color: var(--light-grey);
+	padding: 20px;
+	border-radius: var(--Border-radius-Default);
+}
+
+.btn {
+	background-color: var(--black);
+	border-radius: var(--Border-radius-Default);
+	padding: 12px;
+	color: var(--white);
+}
+
+.btn:hover,
+.btn:active {
+	background-color: var(--orange);
+}
+
+.heading {
+	text-align: center;
+}
+
+.btn-container {
+	display: flex;
+	gap: 2rem;
+}
+
+.btn a {
+	color: #ffffff;
+}
+.bid-status {
+	font-weight: 700;
+	margin-left: 1rem;
+}
+
+.msg {
+	text-align: center;
+}
 .toggle-text {
 	background: none;
 	border: none;

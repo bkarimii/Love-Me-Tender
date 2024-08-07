@@ -81,7 +81,11 @@ const BuyerTenderList = () => {
 					<tbody>
 						{buyerTenders.map((tender) => (
 							<tr key={tender.id}>
-								<td>{tender.id}</td>
+								<td>
+									<a className="tender-id" href={`./bidding/${tender.id}`}>
+										{tender.id}
+									</a>
+								</td>
 								<td>{tender.title}</td>
 								<td>{dateFormat(tender.creation_date)}</td>
 								<td>{dateFormat(tender.announcement_date)}</td>
