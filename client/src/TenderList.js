@@ -68,87 +68,93 @@ const TendersList = () => {
 	};
 
 	return (
-		<div className="tenders-container">
+		<div className="container">
 			{error && <p className="error-message">{error}</p>}
-			<table className="tenders-table">
-				<thead>
-					<tr>
-						<th>Tender ID</th>
-						<th>Tender Title</th>
-						<th>Tender Description</th>
-						<th>Tender Created Date</th>
-						<th>Tender Announcement Date</th>
-						<th>Tender Closing Date</th>
-						<th>Tender Project Deadline Date</th>
-						<th>Tender Status</th>
-						<th
-							className={
-								role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
-							}
-						>
-							Actions
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{tenders.map((tender) => (
-						<tr key={tender.id}>
-							<td>{tender.id}</td>
-							<td>{tender.title}</td>
-							<td className="description">
-								{expandedTenderId === tender.id ? (
-									<p>
-										{tender.description || "No description available"}
+			{tenders.length === 0 ? (
+				<div className="msg">You do not have any tenders!</div>
+			) : (
+				tenders.map((tender) => (
+					<div className="card" key={tender.tender_id}>
+						<p className="posted-on">
+							ID:<span className="posted-on-date"> {tender.id}</span>
+							<span data-status={tender.status} className="bid-status">
+								{tender.status}
+							</span>
+						</p>
+						<h2 className="title">
+							<a className="tender-id" href={`./bidding/${tender.id}`}>
+								{tender.title}
+							</a>
+						</h2>
+						<h5>{tender.company}</h5>
+						<div className="details">
+							<p>
+								<strong>Creation Date: </strong>
+								{new Date(tender.creation_date).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Announcement Date: </strong>
+								{new Date(tender.announcement_date).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Deadline Date: </strong>
+								{new Date(tender.deadline).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Closing Date: </strong>
+								{new Date(tender.closing_date).toLocaleDateString()}
+							</p>
+						</div>
+						<h4>Description: </h4>
+						<p className="cover-letter">
+							{expandedTenderId === tender.id ? (
+								<p>
+									{tender.description || "No description available"}
+									<button
+										className="toggle-text"
+										onClick={() => handleTenderClick(tender.id)}
+										aria-expanded={expandedTenderId === tender.id}
+										aria-controls={`description-${tender.id}`}
+									>
+										Read less
+									</button>
+								</p>
+							) : (
+								<p>
+									{truncateText(
+										tender.description || "No description available",
+										150
+									)}
+									{(tender.description || "").length > 30 && (
 										<button
 											className="toggle-text"
 											onClick={() => handleTenderClick(tender.id)}
 											aria-expanded={expandedTenderId === tender.id}
 											aria-controls={`description-${tender.id}`}
 										>
-											Show Less
+											Read More
 										</button>
-									</p>
-								) : (
-									<p>
-										{truncateText(
-											tender.description || "No description available",
-											30
-										)}
-										{(tender.description || "").length > 30 && (
-											<button
-												className="toggle-text"
-												onClick={() => handleTenderClick(tender.id)}
-												aria-expanded={expandedTenderId === tender.id}
-												aria-controls={`description-${tender.id}`}
-											>
-												Show More
-											</button>
-										)}
-									</p>
-								)}
-							</td>
-							<td>{new Date(tender.creation_date).toLocaleDateString()}</td>
-							<td>{new Date(tender.announcement_date).toLocaleDateString()}</td>
-							<td>{new Date(tender.closing_date).toLocaleDateString()}</td>
-							<td>{new Date(tender.deadline).toLocaleDateString()}</td>
-							<td data-status={tender.status}>{tender.status}</td>
-							<td
-								className={
-									role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
-								}
-							>
-								{hasSubmittedBid(tender.id) ? (
-									<button disabled>Bid Submitted</button>
-								) : (
-									<Link to={`/tenders/${tender.id}/submit-bid`}>
-										Submit Bid
-									</Link>
-								)}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
+									)}
+								</p>
+							)}
+						</p>
+						<p
+							className={
+								role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
+							}
+						>
+							{hasSubmittedBid(tender.id) ? (
+								<button disabled>Bid Submitted</button>
+							) : (
+								<Link to={`/tenders/${tender.id}/submit-bid`}>Submit Bid</Link>
+							)}
+						</p>
+						<p className="right last-update">
+							Updated on: {new Date(tender.last_update).toLocaleDateString()}
+						</p>
+					</div>
+				))
+			)}
 			{loading && <p>Loading...</p>}
 			<div className="pagination-buttons">
 				{pagination.currentPage > 1 && (

@@ -154,14 +154,18 @@ td[data-status="Closed"] {
 .toggle-text {
 	background: none;
 	border: none;
-	color: blue;
+	color: var(--black);
 	cursor: pointer;
-	text-decoration: underline;
 	font-size: 0.8em;
 	padding: 0;
+	font-weight: 700;
 	margin-top: 5px;
 }
 
+.toggle-text:hover {
+	background-color: transparent;
+	color: red;
+}
 .tenders-table td.description {
 	width: 1000px;
 	overflow: hidden;
@@ -175,4 +179,41 @@ td[data-status="Closed"] {
 
 .hideSubmitButton {
 	display: none;
+}
+
+.details {
+	display: flex;
+	justify-content: space-between;
+}
+
+span[data-status="Active"] {
+	color: #14ae5c;
+}
+
+span[data-status="In review"] {
+	color: #e5a000;
+}
+
+span[data-status="Awarded"] {
+	color: #ec221f;
+}
+
+span[data-status="Closed"] {
+	color: #8a226f;
+}
+
+.tender-id {
+	font-weight: 700;
+}
+
+.tender-id:hover {
+	color: #ec221f;
+	text-decoration: underline;
+}
+.right {
+	text-align: right;
+}
+.last-update {
+	color: #757575;
+	font-size: 1rem;
 }
