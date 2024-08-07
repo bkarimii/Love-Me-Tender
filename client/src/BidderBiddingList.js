@@ -1,23 +1,38 @@
 import { useEffect, useState } from "react";
-import { get } from "./TenderClient";
+import { get, post } from "./TenderClient";
 
 const BidderBiddingList = () => {
 	const [loading, setLoading] = useState(true);
 	const [bidderList, setBidderList] = useState([]);
 	const [errorMsg, setErrorMsg] = useState(null);
 
+	const fetchBidderBids = async () => {
+		try {
+			const data = await get("api/bidder-bid?page=1");
+			setLoading(false);
+			setBidderList(data.results);
+		} catch (error) {
+			setErrorMsg("Sever Error");
+		}
+	};
+
 	useEffect(() => {
-		const fetchBidderBids = async () => {
-			try {
-				const data = await get("api/bidder-bid?page=1");
-				setLoading(false);
-				setBidderList(data.results);
-			} catch (error) {
-				setErrorMsg(error.message);
-			}
-		};
 		fetchBidderBids();
 	}, []);
+
+	const handleStatusChange = async (bidId, newStatus) => {
+		try {
+			setBidderList((prevList) =>
+				prevList.map((bid) =>
+					bid.bid_id === bidId ? { ...bid, status: newStatus } : bid
+				)
+			);
+
+			await post(`/api/bid/${bidId}/status`, { status: newStatus });
+		} catch (error) {
+			setErrorMsg("Server Error");
+		}
+	};
 
 	if (errorMsg !== null) {
 		return <div>{errorMsg}</div>;
@@ -48,6 +63,9 @@ const BidderBiddingList = () => {
 							<p>{bid.cover_letter}</p>
 						</div>
 						<p>Completion Time: {bid.suggested_duration_days}days</p>
+						<button onClick={() => handleStatusChange(bid.bid_id, "Withdrawn")}>
+							Withdraw
+						</button>
 					</div>
 				))}
 			</div>

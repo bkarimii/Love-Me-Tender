@@ -552,7 +552,7 @@ SELECT bid.*, bidder.first_name, bidder.last_name, ba.attachment
 router.post("/bid/:bidId/status", async (req, res) => {
 	const bidId = parseInt(req.params.bidId, 10);
 	const status = req.body.status;
-	const validStatuses = ["Awarded", "Rejected", "Withdraw", "In review"];
+	const validStatuses = ["Awarded", "Rejected", "Withdrawn", "In review"];
 	const user = req.user;
 
 	if (!validStatuses.includes(status)) {
@@ -600,7 +600,7 @@ router.post("/bid/:bidId/status", async (req, res) => {
 			return res.status(403).send({ code: "FORBIDDEN" });
 		}
 
-		if (status === "Withdraw" && user.id !== bidderId) {
+		if (status === "Withdrawn" && user.id !== bidderId) {
 			await client.query("ROLLBACK");
 			return res.status(403).send({ code: "FORBIDDEN" });
 		}
