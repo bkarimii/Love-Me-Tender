@@ -8,16 +8,13 @@ const BuyerTenderList = () => {
 	const [buyerTenders, setBuyerTenders] = useState([]);
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [expandedTenderId, setExpandedTenderId] = useState(null);
 	const [pagination, setPagination] = useState({
 		itemsPerPage: 5,
 		currentPage: currentPage,
 		totalPages: 1,
 	});
 	const navigate = useNavigate();
-
-	function dateFormat(date) {
-		return date ? date.split("T")[0] : "N/A";
-	}
 
 	const fetchTenders = async (page) => {
 		setLoading(true);
@@ -57,49 +54,100 @@ const BuyerTenderList = () => {
 		return <div>Loading!!</div>;
 	}
 
+	const truncateText = (text, limit) => {
+		if (text.length <= limit) {
+			return text;
+		}
+		return text.substring(0, limit) + "...";
+	};
+
+	const handleTenderClick = (id) => {
+		setExpandedTenderId((prevId) => (prevId === id ? null : id));
+	};
+
 	return (
 		<main>
-			<div className="tenders-container">
-				<h2>My Tenders List</h2>
+			<h2 className="msg">My Tenders List</h2>
+			<div className="container">
 				{errorMsg && <p className="error-message">{errorMsg}</p>}
-				<table className="tenders-table">
-					<thead>
-						<tr>
-							<th>Tender ID</th>
-							<th>Tender Title</th>
-							<th>Tender Created Date</th>
-							<th>Tender Announcement Date</th>
-							<th>Tender Project Deadline Date</th>
-							<th>Tender Closing Date</th>
-							<th>Tender Description</th>
-							<th>Tender Cost</th>
-							<th>Tender No. of bids</th>
-							<th>Tender Status</th>
-							<th>Last Update</th>
-						</tr>
-					</thead>
-					<tbody>
-						{buyerTenders.map((tender) => (
-							<tr key={tender.id}>
-								<td>
-									<a className="tender-id" href={`./bidding/${tender.id}`}>
-										{tender.id}
-									</a>
-								</td>
-								<td>{tender.title}</td>
-								<td>{dateFormat(tender.creation_date)}</td>
-								<td>{dateFormat(tender.announcement_date)}</td>
-								<td>{dateFormat(tender.deadline)}</td>
-								<td>{dateFormat(tender.closing_date)}</td>
-								<td>{tender.description.substring(0, 200)}</td>
-								<td>{tender.no_of_bids_received}</td>
-								<td>£{tender.cost}</td>
-								<td data-status={tender.status}>{tender.status}</td>
-								<td>{dateFormat(tender.last_update)}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+				{buyerTenders.length === 0 ? (
+					<div className="msg">You do not have any tenders!</div>
+				) : (
+					buyerTenders.map((tender) => (
+						<div className="card" key={tender.tender_id}>
+							<p className="posted-on">
+								ID: <span className="posted-on-date">{tender.id}</span>
+								<span data-status={tender.status} className="bid-status">
+									{tender.status}
+								</span>
+							</p>
+							<h2 className="title">
+								<a className="tender-id" href={`./bidding/${tender.id}`}>
+									{tender.title}
+								</a>
+							</h2>
+							<div className="details">
+								<p>
+									<strong>Creation Date: </strong>
+									{new Date(tender.creation_date).toLocaleDateString()}
+								</p>
+								<p>
+									<strong>Announcement Date: </strong>
+									{new Date(tender.announcement_date).toLocaleDateString()}
+								</p>
+								<p>
+									<strong>Deadline Date: </strong>
+									{new Date(tender.deadline).toLocaleDateString()}
+								</p>
+								<p>
+									<strong>Closing Date: </strong>
+									{new Date(tender.closing_date).toLocaleDateString()}
+								</p>
+							</div>
+							<h4>Description: </h4>
+							<p className="cover-letter">
+								{expandedTenderId === tender.id ? (
+									<p>
+										{tender.description || "No description available"}
+										<button
+											className="toggle-text"
+											onClick={() => handleTenderClick(tender.id)}
+											aria-expanded={expandedTenderId === tender.id}
+											aria-controls={`description-${tender.id}`}
+										>
+											Read less
+										</button>
+									</p>
+								) : (
+									<p>
+										{truncateText(
+											tender.description || "No description available",
+											150
+										)}
+										{(tender.description || "").length > 30 && (
+											<button
+												className="toggle-text"
+												onClick={() => handleTenderClick(tender.id)}
+												aria-expanded={expandedTenderId === tender.id}
+												aria-controls={`description-${tender.id}`}
+											>
+												Read More
+											</button>
+										)}
+									</p>
+								)}
+							</p>
+							<p>
+								<strong>Cost: </strong>£{tender.cost}
+								<span>
+									<strong>No. Of Bids Received: </strong>
+									{tender.no_of_bids_received}
+								</span>
+							</p>
+						</div>
+					))
+				)}
+
 				{loading && <p>Loading...</p>}
 				<div className="pagination-buttons">
 					{pagination.currentPage > 1 && (

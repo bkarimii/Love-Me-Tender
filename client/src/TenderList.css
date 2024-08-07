@@ -143,6 +143,7 @@ td[data-status="Closed"] {
 .btn a {
 	color: #ffffff;
 }
+
 .bid-status {
 	font-weight: 700;
 	margin-left: 1rem;
@@ -151,6 +152,7 @@ td[data-status="Closed"] {
 .msg {
 	text-align: center;
 }
+
 .toggle-text {
 	background: none;
 	border: none;
@@ -166,6 +168,7 @@ td[data-status="Closed"] {
 	background-color: transparent;
 	color: red;
 }
+
 .tenders-table td.description {
 	width: 1000px;
 	overflow: hidden;
@@ -217,3 +220,4 @@ span[data-status="Closed"] {
 	color: #757575;
 	font-size: 1rem;
 }
+
