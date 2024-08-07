@@ -81,11 +81,7 @@ const TendersList = () => {
 								{tender.status}
 							</span>
 						</p>
-						<h2 className="title">
-							<a className="tender-id" href={`./bidding/${tender.id}`}>
-								{tender.title}
-							</a>
-						</h2>
+						<h2 className="title">{tender.title}</h2>
 						<h5>{tender.company}</h5>
 						<div className="details">
 							<p>
