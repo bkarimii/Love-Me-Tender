@@ -65,7 +65,7 @@ function LogInForm() {
 							type="email"
 							id="email"
 							name="email"
-							placeholder="Value"
+							placeholder="Enter your e-mail"
 							value={emailInput}
 							onChange={handleEmailChange}
 							required
@@ -79,7 +79,7 @@ function LogInForm() {
 							type="password"
 							id="password"
 							name="password"
-							placeholder="Value"
+							placeholder="Enter your password"
 							value={passwordInput}
 							onChange={handlePasswordChange}
 							required

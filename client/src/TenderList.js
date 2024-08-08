@@ -84,9 +84,14 @@ const TendersList = () => {
 	return (
 		<div className="container">
 			{error && <p className="error-message">{error}</p>}
-			<div className="sort-controls">
+			<div className="form-label sort-controls">
 				<label htmlFor="sort">Sort by:</label>
-				<select id="sort" value={sortField} onChange={handleSortChange}>
+				<select
+					id="sort"
+					className="form-input sort"
+					value={sortField}
+					onChange={handleSortChange}
+				>
 					<option value="creation_date">Creation Date</option>
 					<option value="closing_date">Closing Date</option>
 					<option value="deadline">Project Deadline Date</option>
