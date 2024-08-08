@@ -613,6 +613,18 @@ router.post("/bid/:bidId/status", async (req, res) => {
 			return res.status(403).send({ code: "FORBIDDEN" });
 		}
 
+		if (status === "Active") {
+			const activeBidCheck = await client.query(
+				"SELECT bid_id FROM bid WHERE tender_id = $1 AND bidder_id = $2 AND status = 'Active' AND bid_id != $3;",
+				[tenderId, bidderId, bidId]
+			);
+
+			if (activeBidCheck.rowCount > 0) {
+				await client.query("ROLLBACK");
+				return res.status(400).send({ code: "DUPLICATE_ACTIVE_BID" });
+			}
+		}
+
 		if (status === "Awarded") {
 			const rejectStatus = "Rejected";
 
@@ -705,8 +717,9 @@ router.post("/bid", async (req, res) => {
 			await client.query("BEGIN");
 
 			const checkBidQuery = `
-				SELECT * FROM bid WHERE tender_id = $1 AND bidder_id = $2
+				SELECT * FROM bid WHERE tender_id = $1 AND bidder_id = $2 AND status = 'Active'
 			`;
+
 			const checkBidValues = [tenderId, bidderId];
 			const existingBid = await client.query(checkBidQuery, checkBidValues);
 
@@ -714,12 +727,10 @@ router.post("/bid", async (req, res) => {
 				await client.query("ROLLBACK");
 				return res.status(400).json({ code: "DUPLICATE_ENTRY" });
 			}
-
 			const bidQuery = `
-				INSERT INTO bid (tender_id, bidder_id, bidding_date, status, bidding_amount, cover_letter, suggested_duration_days)
-				VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING bid_id
-			`;
-
+                      INSERT INTO bid (tender_id, bidder_id, bidding_date, status, bidding_amount, cover_letter, suggested_duration_days)
+					  VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING bid_id
+                    `;
 			const bidValues = [
 				tenderId,
 				bidderId,

@@ -46,6 +46,7 @@ const BidderBiddingList = () => {
 			);
 
 			await post(`/api/bid/${bidId}/status`, { status: newStatus });
+			fetchBids();
 		} catch (error) {
 			setErrorMsg("Server Error");
 		}

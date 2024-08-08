@@ -65,7 +65,12 @@ const TendersList = () => {
 	};
 
 	const hasSubmittedBid = (tenderId) => {
-		return bids.some((bid) => bid.tender_id === tenderId && role === "bidder");
+		return bids.some(
+			(bid) =>
+				bid.tender_id === tenderId &&
+				bid.status !== "Withdrawn" &&
+				role === "bidder"
+		);
 	};
 
 	const handleSortChange = (event) => {
