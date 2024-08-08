@@ -141,11 +141,9 @@ const TendersList = () => {
 								}
 							>
 								{hasSubmittedBid(tender.id) ? (
-									<button className="btn" disabled>
-										Bid Submitted
-									</button>
+									<p disabled>Bid Submitted</p>
 								) : (
-									<Link to={`/tenders/${tender.id}/submit-bid`}>
+									<Link className="btn" to={`/tenders/${tender.id}/submit-bid`}>
 										Submit Bid
 									</Link>
 								)}
