@@ -404,8 +404,9 @@ router.get("/tenders", async (req, res) => {
 	const tendersSql = `
 		SELECT id, title, creation_date, announcement_date, deadline, description, status, closing_date, last_update
         FROM tender
-        ORDER BY creation_date DESC
-		    LIMIT $1 OFFSET $2
+        ORDER BY ${sort}  DESC
+		LIMIT $1 OFFSET $2
+		
 	`;
 
 	try {
