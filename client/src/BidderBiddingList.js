@@ -39,6 +39,15 @@ const BidderBiddingList = () => {
 
 	const handleStatusChange = async (bidId, newStatus) => {
 		try {
+			if (newStatus === "Withdrawn") {
+				const confirmWithdrawal = window.confirm(
+					"Are you sure you want to withdraw this bid?"
+				);
+				if (!confirmWithdrawal) {
+					return;
+				}
+			}
+
 			setBids((prevList) =>
 				prevList.map((bid) =>
 					bid.bid_id === bidId ? { ...bid, status: newStatus } : bid
