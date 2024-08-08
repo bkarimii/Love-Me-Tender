@@ -392,11 +392,19 @@ router.get("/tenders", async (req, res) => {
 	const page = parseInt(req.query.page, 10) || 1;
 	const limit = 25;
 	const offset = (page - 1) * limit;
+
+	const sort = req.query.sort || "creation_date";
+	const validSorts = ["creation_date", "closing_date", "deadline"];
+
+	if (!validSorts.includes(sort)) {
+		return res.status(400).json({ code: "INVALID_SORT_FIELD" });
+	}
+
 	const countSql = "SELECT COUNT(*) FROM tender";
 	const tendersSql = `
 		SELECT id, title, creation_date, announcement_date, deadline, tender.description, status, closing_date, tender.last_update, buyer.company
         FROM tender JOIN buyer ON tender.buyer_id = buyer.user_id
-        ORDER BY creation_date DESC
+        ORDER BY ${sort}  DESC
 		LIMIT $1 OFFSET $2
 	`;
 
