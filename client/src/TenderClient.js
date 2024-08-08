@@ -21,7 +21,9 @@ const handleAuthError = (error) => {
 	if (error.response && error.response.status === 401) {
 		localStorage.removeItem("authToken");
 		localStorage.removeItem("userType");
-		window.location.href = "/";
+		if (window.location.pathname !== "/") {
+			window.location.href = "/";
+		}
 	} else {
 		throw error;
 	}
