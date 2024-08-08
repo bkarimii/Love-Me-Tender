@@ -14,7 +14,6 @@ const PublishTenderForm = () => {
 	const [skills, setSkills] = useState([]);
 	const [selectedSkills, setSelectedSkills] = useState([]);
 	const [errors, setErrors] = useState([]);
-	const [setectedOption, setSelectedOption] = useState([]);
 
 	useEffect(() => {
 		const fetchSkills = async () => {
@@ -30,13 +29,13 @@ const PublishTenderForm = () => {
 		fetchSkills();
 	}, []);
 
-	const options = skills.map((skill, index) => ({
-		value: index,
+	const options = skills.map((skill) => ({
+		value: skill.skill_id,
 		label: skill.skill_name,
 	}));
 
-	const handleChange = (selectedOption) => {
-		setSelectedOption(selectedOption);
+	const handleChange = (selectedOptions) => {
+		setSelectedSkills(selectedOptions);
 	};
 
 	const handleTitleChange = (e) => {
@@ -103,9 +102,8 @@ const PublishTenderForm = () => {
 					closingDate,
 					announcementDate,
 					deadlineDate,
-					selectedSkills,
+					selectedSkills: selectedSkills.map((skill) => skill.value),
 				};
-
 				await post("api/tender", formData);
 
 				setTitle("");
@@ -202,7 +200,7 @@ const PublishTenderForm = () => {
 						<Select
 							className="input-form select"
 							options={options}
-							value={setectedOption}
+							value={selectedSkills}
 							onChange={handleChange}
 							isMulti
 						></Select>
