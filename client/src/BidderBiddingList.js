@@ -45,7 +45,6 @@ const BidderBiddingList = () => {
 		}
 	};
 
-
 	const handleStatusChange = async (bidId, newStatus) => {
 		try {
 			setBids((prevList) =>
@@ -112,7 +111,10 @@ const BidderBiddingList = () => {
 									{bid.suggested_duration_days} days
 								</span>
 							</p>
-							<button className="btn withdraw-btn" onClick={() => handleStatusChange(bid.bid_id, "Withdrawn")}>
+							<button
+								className="btn withdraw-btn"
+								onClick={() => handleStatusChange(bid.bid_id, "Withdrawn")}
+							>
 								Withdraw
 							</button>
 						</div>
@@ -122,7 +124,11 @@ const BidderBiddingList = () => {
 				{loading && <p>Loading...</p>}
 				<div className="pagination-buttons">
 					{pagination.currentPage > 1 && (
-						<button className="btn" onClick={loadPreviousPage} disabled={loading}>
+						<button
+							className="btn"
+							onClick={loadPreviousPage}
+							disabled={loading}
+						>
 							Previous Page
 						</button>
 					)}
@@ -132,9 +138,8 @@ const BidderBiddingList = () => {
 						</button>
 					)}
 				</div>
-
 			</div>
-		</main >
+		</main>
 	);
 };
 

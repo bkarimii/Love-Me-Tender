@@ -134,32 +134,38 @@ const TendersList = () => {
 								</p>
 							)}
 						</p>
-						<p
-							className={
-								role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
-							}
-						>
-							{hasSubmittedBid(tender.id) ? (
-								<button disabled>Bid Submitted</button>
-							) : (
-								<Link to={`/tenders/${tender.id}/submit-bid`}>Submit Bid</Link>
-							)}
-						</p>
-						<p className="right last-update">
-							Updated on: {new Date(tender.last_update).toLocaleDateString()}
-						</p>
+						<div className="flex">
+							<p
+								className={
+									role === "bidder" ? "showSubmitButton" : "hideSubmitButton"
+								}
+							>
+								{hasSubmittedBid(tender.id) ? (
+									<button className="btn" disabled>
+										Bid Submitted
+									</button>
+								) : (
+									<Link to={`/tenders/${tender.id}/submit-bid`}>
+										Submit Bid
+									</Link>
+								)}
+							</p>
+							<p className="right last-update">
+								Updated on: {new Date(tender.last_update).toLocaleDateString()}
+							</p>
+						</div>
 					</div>
 				))
 			)}
 			{loading && <p>Loading...</p>}
 			<div className="pagination-buttons">
 				{pagination.currentPage > 1 && (
-					<button onClick={loadPreviousPage} disabled={loading}>
+					<button className="btn" onClick={loadPreviousPage} disabled={loading}>
 						Previous Page
 					</button>
 				)}
 				{pagination.currentPage < pagination.totalPages && (
-					<button onClick={loadNextPage} disabled={loading}>
+					<button className="btn" onClick={loadNextPage} disabled={loading}>
 						Next Page
 					</button>
 				)}

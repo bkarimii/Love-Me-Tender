@@ -39,6 +39,8 @@
 
 .pagination-buttons {
 	margin-top: 20px;
+	display: flex;
+	gap: 2rem;
 }
 
 .pagination-buttons button {
@@ -219,4 +221,9 @@ span[data-status="Closed"] {
 .last-update {
 	color: #757575;
 	font-size: 1rem;
+}
+.flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }

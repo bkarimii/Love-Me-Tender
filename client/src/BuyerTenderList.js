@@ -138,7 +138,7 @@ const BuyerTenderList = () => {
 								)}
 							</p>
 							<p>
-								<strong>Cost: </strong>£{tender.cost}
+								<strong>Cost: </strong>£{tender.cost}{" "}
 								<span>
 									<strong>No. Of Bids Received: </strong>
 									{tender.no_of_bids_received}
@@ -151,12 +151,16 @@ const BuyerTenderList = () => {
 				{loading && <p>Loading...</p>}
 				<div className="pagination-buttons">
 					{pagination.currentPage > 1 && (
-						<button onClick={loadPreviousPage} disabled={loading}>
+						<button
+							className="btn"
+							onClick={loadPreviousPage}
+							disabled={loading}
+						>
 							Previous Page
 						</button>
 					)}
 					{pagination.currentPage < pagination.totalPages && (
-						<button onClick={loadNextPage} disabled={loading}>
+						<button className="btn" onClick={loadNextPage} disabled={loading}>
 							Next Page
 						</button>
 					)}
