@@ -24,3 +24,22 @@
 	display: block;
 	gap: 1rem;
 }
+
+.submit-form-container {
+	width: 70vw;
+	height: auto;
+}
+
+.submit-form {
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--Border-Default);
+	border-radius: 8px;
+	padding: 24px;
+}
+
+.submit-form-details {
+	display: flex;
+	gap: 3rem;
+	margin-top: 3rem;
+}

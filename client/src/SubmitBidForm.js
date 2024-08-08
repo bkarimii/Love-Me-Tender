@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { get, post } from "./TenderClient";
 import "./SubmitBidForm.css";
+import Logo from "./assets/images/CTY-logo-rectangle.png";
 
 const SubmitBidForm = () => {
 	const { tenderId } = useParams();
@@ -10,6 +11,8 @@ const SubmitBidForm = () => {
 	const [proposedBudget, setProposedBudget] = useState("");
 	const [errorStatus, setErrorStatus] = useState("");
 	const [errors, setErrors] = useState([]);
+	const [expandedTenderId, setExpandedTenderId] = useState(null);
+
 	const [tender, setTender] = useState(null);
 	const navigate = useNavigate();
 
@@ -81,85 +84,143 @@ const SubmitBidForm = () => {
 		}
 	};
 
+	const handleTenderClick = (id) => {
+		setExpandedTenderId((prevId) => (prevId === id ? null : id));
+	};
+
+	const truncateText = (text, limit) => {
+		if (text.length <= limit) {
+			return text;
+		}
+		return text.substring(0, limit) + "...";
+	};
+
 	return (
-		<div className="main submit-bid-form-container">
-			{tender ? (
-				<div className="tender-info">
-					<h3>Tender Information</h3>
-					<p>
-						<strong>Title:</strong> {tender.title}
-					</p>
-					<p>
-						<strong>Description:</strong> {tender.description}
-					</p>
-					<p>
-						<strong>Creation Date:</strong>{" "}
-						{new Date(tender.creation_date).toLocaleDateString()}
-					</p>
-					<p>
-						<strong>Closing Date:</strong>{" "}
-						{new Date(tender.closing_date).toLocaleDateString()}
-					</p>
-					<p>
-						<strong>Announcement Date:</strong>{" "}
-						{new Date(tender.announcement_date).toLocaleDateString()}
-					</p>
-					<p>
-						<strong>Deadline:</strong>{" "}
-						{new Date(tender.deadline).toLocaleDateString()}
-					</p>
-					<p>
-						<strong>Status:</strong> {tender.status}
-					</p>
+		<main className="main">
+			<h3 className="msg">Tender Information</h3>
+
+			<div className="container center">
+				{tender ? (
+					<div className="card">
+						<p>
+							<strong>Title:</strong> {tender.title}{" "}
+							<span data-status={tender.status}>{tender.status}!!</span>
+						</p>
+						<div className="details">
+							<p>
+								<strong>Creation Date: </strong>
+								{new Date(tender.creation_date).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Announcement Date: </strong>
+								{new Date(tender.announcement_date).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Deadline Date: </strong>
+								{new Date(tender.deadline).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Closing Date: </strong>
+								{new Date(tender.closing_date).toLocaleDateString()}
+							</p>
+						</div>
+						<h4>Description: </h4>
+						<p className="cover-letter">
+							{expandedTenderId === tender.id ? (
+								<p>
+									{tender.description || "No description available"}
+									<button
+										className="toggle-text"
+										onClick={() => handleTenderClick(tender.id)}
+										aria-expanded={expandedTenderId === tender.id}
+										aria-controls={`description-${tender.id}`}
+									>
+										Read less
+									</button>
+								</p>
+							) : (
+								<p>
+									{truncateText(
+										tender.description || "No description available",
+										150
+									)}
+									{(tender.description || "").length > 30 && (
+										<button
+											className="toggle-text"
+											onClick={() => handleTenderClick(tender.id)}
+											aria-expanded={expandedTenderId === tender.id}
+											aria-controls={`description-${tender.id}`}
+										>
+											Read More
+										</button>
+									)}
+								</p>
+							)}
+						</p>
+					</div>
+				) : (
+					<p>Loading tender details...</p>
+				)}
+				<div className="form-container submit-form-container">
+					<div className="form-logo">
+						<img src={Logo} alt="logo" />
+					</div>
+					<h1 className="form-heading">Submit Bid</h1>
+					<form onSubmit={handleSubmit} className="submit-form">
+						<div className="form-label">
+							<label htmlFor="coverLetter">Cover Letter:</label>
+							<textarea
+								className="form-input textarea"
+								id="coverLetter"
+								value={coverLetter}
+								onChange={handleCoverLetterChange}
+							></textarea>
+						</div>
+						<div className="submit-form-details">
+							<div className="form-label">
+								<label htmlFor="proposedDuration">
+									Proposed Project Duration (Days):
+								</label>
+								<input
+									className="form-input"
+									type="number"
+									id="proposedDuration"
+									value={proposedDuration}
+									onChange={handleProposedDurationChange}
+									required
+								/>
+							</div>
+							<div className="form-label">
+								<label htmlFor="proposedBudget">
+									Proposed Project Budget (£):
+								</label>
+								<input
+									className="form-input"
+									type="number"
+									id="proposedBudget"
+									value={proposedBudget}
+									onChange={handleProposedBudgetChange}
+									required
+								/>
+							</div>
+						</div>
+						<button className="btn" type="submit">
+							Submit Bid
+						</button>
+					</form>
 				</div>
-			) : (
-				<p>Loading tender details...</p>
-			)}
-			<h2>Submit Bid</h2>
-			<form onSubmit={handleSubmit} className="submit-bid-form">
-				<div className="form-group">
-					<label htmlFor="coverLetter">Cover Letter:</label>
-					<textarea
-						id="coverLetter"
-						value={coverLetter}
-						onChange={handleCoverLetterChange}
-					></textarea>
-				</div>
-				<div className="form-group">
-					<label htmlFor="proposedDuration">
-						Proposed Project Duration (Days):
-					</label>
-					<input
-						type="number"
-						id="proposedDuration"
-						value={proposedDuration}
-						onChange={handleProposedDurationChange}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="proposedBudget">Proposed Project Budget (£):</label>
-					<input
-						type="number"
-						id="proposedBudget"
-						value={proposedBudget}
-						onChange={handleProposedBudgetChange}
-						required
-					/>
-				</div>
-				<button type="submit">Submit Bid</button>
-			</form>
-			{errorStatus && (
-				<div className="message">
-					<p>{errorStatus}</p>
-					<ul className="error-list">
-						{errors.map((error, index) => (
-							<li key={index}>{error}</li>
-						))}
-					</ul>
-				</div>
-			)}
-		</div>
+				{errorStatus && (
+					<div className="message">
+						<p>{errorStatus}</p>
+						<ul className="error-list">
+							{errors.map((error, index) => (
+								<li key={index}>{error}</li>
+							))}
+						</ul>
+					</div>
+				)}
+			</div>
+		</main>
 	);
 };
 
