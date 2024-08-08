@@ -1,27 +1,20 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { get, post } from "./TenderClient";
 
 const BidderBiddingList = () => {
-	const { pageNumber } = useParams();
-	const currentPage = pageNumber ? parseInt(pageNumber, 10) : 1;
 	const [bids, setBids] = useState([]);
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [pagination, setPagination] = useState({
-		itemsPerPage: 10,
-		currentPage: currentPage,
-		totalPages: 1,
-	});
-	const navigate = useNavigate();
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
 
 	const fetchBids = async (page) => {
 		setLoading(true);
 		try {
 			const data = await get(`/api/bidder-bid?page=${page}`);
 			setBids(data.results);
-			setPagination(data.pagination);
 			setErrorMsg(null);
+			setTotalPages(data.pagination.totalPages);
 		} catch (error) {
 			setErrorMsg("Error fetching tenders");
 		} finally {
@@ -33,15 +26,14 @@ const BidderBiddingList = () => {
 		fetchBids(currentPage);
 	}, [currentPage]);
 
-	const loadNextPage = () => {
-		if (pagination.currentPage < pagination.totalPages && !loading) {
-			navigate(`/bidder-biddings/page/${pagination.currentPage + 1}`);
+	const handlePrevious = () => {
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1);
 		}
 	};
-
-	const loadPreviousPage = () => {
-		if (pagination.currentPage > 1 && !loading) {
-			navigate(`/bidder-biddings/page/${pagination.currentPage - 1}`);
+	const handleNext = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage(currentPage + 1);
 		}
 	};
 
@@ -125,19 +117,11 @@ const BidderBiddingList = () => {
 
 				{loading && <p>Loading...</p>}
 				<div className="pagination-buttons">
-					{pagination.currentPage > 1 && (
-						<button
-							className="btn"
-							onClick={loadPreviousPage}
-							disabled={loading}
-						>
-							Previous Page
-						</button>
+					{currentPage > 1 && (
+						<button onClick={handlePrevious}>Previous</button>
 					)}
-					{pagination.currentPage < pagination.totalPages && (
-						<button className="btn" onClick={loadNextPage} disabled={loading}>
-							Next Page
-						</button>
+					{currentPage < totalPages && (
+						<button onClick={handleNext}>Next</button>
 					)}
 				</div>
 			</div>
