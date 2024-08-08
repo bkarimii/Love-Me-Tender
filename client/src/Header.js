@@ -132,7 +132,7 @@ const Header = () => {
 							</NavLink>
 							<NavLink
 								exact
-								to="/BidderBiddingList"
+								to="/bidder-biddings"
 								className="nav-link"
 								activeClassName="active"
 							>

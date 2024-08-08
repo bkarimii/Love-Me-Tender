@@ -364,7 +364,7 @@ router.get("/bidder-bid", async (req, res) => {
 
 		const bidsResult = await db.query(
 			`
-			SELECT b.bid_id, b.tender_id, b.bidding_amount, b.status, b.bidding_date AS submission_date, b.suggested_duration_days, t.title
+			SELECT b.bid_id, b.tender_id, b.bidding_amount, b.status, b.bidding_date AS submission_date, b.suggested_duration_days, t.title, t.announcement_date, t.closing_date
 			FROM bid b
 			JOIN tender t ON b.tender_id = t.id
 			WHERE b.bidder_id = $1

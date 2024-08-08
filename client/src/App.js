@@ -30,7 +30,7 @@ const App = () => (
 				path="/buyer-tender/page/:pageNumber"
 				element={<BuyerTenderList />}
 			/>
-			<Route path="/BidderBiddingList" element={<BidderBiddingList />} />
+			<Route path="/bidder-biddings" element={<BidderBiddingList />} />
 			<Route path="/grant-access" element={<GrantAccessForm />} />
 			<Route path="/dashboard" element={<Dashboard />} />
 			<Route path="/dashboard/page/:pageNumber" element={<TendersList />} />
