@@ -1,6 +1,6 @@
 .publish-form-container {
 	width: 408px;
-	height: 901px;
+	height: auto;
 	display: grid;
 	grid-area: 19px;
 	padding: 44px;
@@ -27,7 +27,7 @@
 
 .form-publish {
 	width: 320px;
-	height: 710px;
+	height: auto;
 	border: 1px solid var(--Border-Default);
 	border-radius: 8px;
 	padding: 24px;
@@ -83,6 +83,10 @@
 	height: 1rem;
 	color: red;
 	margin-top: -2rem;
+}
+
+.skills-dropdown {
+	height: auto;
 }
 
 select,

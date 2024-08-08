@@ -75,8 +75,8 @@
 		"webpack-merge": "^5.9.0"
 	},
 	"dependencies": {
-		"axios": "^1.7.2",
 		"@babel/runtime": "^7.22.15",
+		"axios": "^1.7.2",
 		"bcrypt": "^5.1.1",
 		"db-migrate-pg": "^1.5.2",
 		"dotenv": "^16.3.1",
@@ -85,6 +85,7 @@
 		"morgan": "^1.10.0",
 		"nodemailer": "^6.9.14",
 		"pg": "^8.11.3",
+		"react-select": "^5.8.0",
 		"uuid": "^10.0.0",
 		"winston": "^3.10.0"
 	},

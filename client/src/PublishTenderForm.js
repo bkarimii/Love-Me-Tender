@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./PublishTenderForm.css";
 import { get, post } from "./TenderClient";
 import "./styles.css";
+import Select from "react-select";
 import Logo from "./assets/images/CTY-logo-rectangle.png";
 
 const PublishTenderForm = () => {
@@ -13,6 +14,7 @@ const PublishTenderForm = () => {
 	const [skills, setSkills] = useState([]);
 	const [selectedSkills, setSelectedSkills] = useState([]);
 	const [errors, setErrors] = useState([]);
+	const [setectedOption, setSelectedOption] = useState([]);
 
 	useEffect(() => {
 		const fetchSkills = async () => {
@@ -27,6 +29,15 @@ const PublishTenderForm = () => {
 
 		fetchSkills();
 	}, []);
+
+	const options = skills.map((skill, index) => ({
+		value: index,
+		label: skill.skill_name,
+	}));
+
+	const handleChange = (selectedOption) => {
+		setSelectedOption(selectedOption);
+	};
 
 	const handleTitleChange = (e) => {
 		setTitle(e.target.value);
@@ -46,17 +57,6 @@ const PublishTenderForm = () => {
 
 	const handleDeadlineDateChange = (e) => {
 		setDeadlineDate(e.target.value);
-	};
-
-	const handleSkillsChange = (event) => {
-		const options = event.target.options;
-		const selectedSkills = [];
-		for (const option of options) {
-			if (option.selected) {
-				selectedSkills.push(option.value);
-			}
-		}
-		setSelectedSkills(selectedSkills);
 	};
 
 	const handleSubmit = async (event) => {
@@ -199,20 +199,13 @@ const PublishTenderForm = () => {
 					</div>
 					<div className="form-label skills-dropdown">
 						<label htmlFor="skills">Skills Required:</label>
-						<select
-							className="form-input"
-							id="skills"
-							value={selectedSkills}
-							onChange={handleSkillsChange}
-							multiple
-							required
-						>
-							{skills.map((skill) => (
-								<option key={skill.skill_id} value={skill.skill_id}>
-									{skill.skill_name}
-								</option>
-							))}
-						</select>
+						<Select
+							className="input-form select"
+							options={options}
+							value={setectedOption}
+							onChange={handleChange}
+							isMulti
+						></Select>
 					</div>
 					<button className="form-btn" type="submit">
 						Publish Tender
