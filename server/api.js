@@ -643,7 +643,15 @@ router.post("/bid/:bidId/status", async (req, res) => {
 				[rejectStatus, tenderId, bidId]
 			);
 
-			if (awardBidResult.rowCount > 0 || rejectOtherBidsResult.rowCount >= 0) {
+			const updateResult = await client.query(
+				"UPDATE tender SET status = $1 WHERE id = $2;",
+				[status, tenderId]
+			);
+
+			if (
+				awardBidResult.rowCount > 0 ||
+				(rejectOtherBidsResult.rowCount >= 0 && updateResult.rowCount > 0)
+			) {
 				await client.query("COMMIT");
 				return res.status(200).send({ code: "SUCCESS" });
 			} else {
