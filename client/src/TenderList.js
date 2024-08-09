@@ -170,9 +170,14 @@ const TendersList = () => {
 								{hasSubmittedBid(tender.id) ? (
 									<p disabled>Bid Submitted</p>
 								) : (
-									<Link className="btn" to={`/tenders/${tender.id}/submit-bid`}>
-										Submit Bid
-									</Link>
+									tender.status === "Active" && (
+										<Link
+											className="btn"
+											to={`/tenders/${tender.id}/submit-bid`}
+										>
+											Submit Bid
+										</Link>
+									)
 								)}
 							</p>
 							<p className="right last-update">
