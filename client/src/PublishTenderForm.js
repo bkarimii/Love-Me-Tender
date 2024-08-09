@@ -78,9 +78,9 @@ const PublishTenderForm = () => {
 			newErrors.push("Tender Closing Date cannot be in the past.");
 		}
 
-		if (announcementDate > closingDate) {
+		if (announcementDate < closingDate) {
 			newErrors.push(
-				"Tender Announcement Date must be before the Closing Date."
+				"Tender Announcement Date must be after the Closing Date."
 			);
 		}
 
@@ -163,17 +163,6 @@ const PublishTenderForm = () => {
 						></textarea>
 					</div>
 					<div className="form-label date">
-						<label htmlFor="announcementDate">Tender Announcement Date:</label>
-						<input
-							className="form-input"
-							type="date"
-							id="announcementDate"
-							value={announcementDate}
-							onChange={handleAnnouncementDateChange}
-							required
-						/>
-					</div>
-					<div className="form-label date">
 						<label htmlFor="closingDate">Tender Closing Date:</label>
 						<input
 							className="form-input"
@@ -181,6 +170,17 @@ const PublishTenderForm = () => {
 							id="closingDate"
 							value={closingDate}
 							onChange={handleClosingDateChange}
+							required
+						/>
+					</div>
+					<div className="form-label date">
+						<label htmlFor="announcementDate">Tender Announcement Date:</label>
+						<input
+							className="form-input"
+							type="date"
+							id="announcementDate"
+							value={announcementDate}
+							onChange={handleAnnouncementDateChange}
 							required
 						/>
 					</div>

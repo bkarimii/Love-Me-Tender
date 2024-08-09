@@ -116,16 +116,16 @@ const TendersList = () => {
 								{new Date(tender.creation_date).toLocaleDateString()}
 							</p>
 							<p>
+								<strong>Closing Date: </strong>
+								{new Date(tender.closing_date).toLocaleDateString()}
+							</p>
+							<p>
 								<strong>Announcement Date: </strong>
 								{new Date(tender.announcement_date).toLocaleDateString()}
 							</p>
 							<p>
 								<strong>Deadline Date: </strong>
 								{new Date(tender.deadline).toLocaleDateString()}
-							</p>
-							<p>
-								<strong>Closing Date: </strong>
-								{new Date(tender.closing_date).toLocaleDateString()}
 							</p>
 						</div>
 						<h4>Description: </h4>
