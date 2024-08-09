@@ -73,6 +73,37 @@ const BidList = () => {
 		await handleBidStatusChange(bidId, "Awarded");
 	};
 
+	const handleTenderStatusChange = async (tenderId, status) => {
+		try {
+			await post(`/api/tender/${tenderId}/status`, { status });
+			setUpdatedStatus(
+				`Updated the status for tender ${tenderId} to ${status}!`
+			);
+			await fetchData();
+		} catch (error) {
+			setStatusError("An error occurred while updating tender status!");
+		}
+	};
+
+	const handleInReviewStatus = async (tenderId) => {
+		const confirmation = window.confirm(
+			"Are you sure you want to change the tender status to in review ?"
+		);
+		if (!confirmation) {
+			return;
+		}
+		await handleTenderStatusChange(tenderId, "In Review");
+	};
+	const handleCancelStatus = async (tenderId) => {
+		const confirmation = window.confirm(
+			"Are you sure you want to cancel the tender ?"
+		);
+		if (!confirmation) {
+			return;
+		}
+		await handleTenderStatusChange(tenderId, "Cancelled");
+	};
+
 	const loadNextPage = () => {
 		if (pagination.currentPage < pagination.totalPages && !loading) {
 			navigate(`/bidding/${tenderId}/page/${pagination.currentPage + 1}`);
@@ -135,6 +166,32 @@ const BidList = () => {
 						<strong>Last Update: </strong>
 						{new Date(tender.last_update).toLocaleString()}
 					</p>
+					<div className="btn-container">
+						{tender.status === "Active" && (
+							<>
+								<button
+									className="btn"
+									onClick={() => handleInReviewStatus(tender.id)}
+								>
+									In Review
+								</button>
+								<button
+									className="btn"
+									onClick={() => handleCancelStatus(tender.id)}
+								>
+									Cancel
+								</button>
+							</>
+						)}
+						{tender.status === "In Review" && (
+							<button
+								className="btn"
+								onClick={() => handleCancelStatus(tender.id)}
+							>
+								Cancel
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 			<h2 className="heading">Bids</h2>

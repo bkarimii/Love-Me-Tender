@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import mail from "./mail";
 
 const itemsPerPage = 25;
+const validTenderStatuses = ["Active", "In Review", "Cancelled", "Awarded"];
 const router = Router();
 
 const allowlist = {
@@ -501,6 +502,72 @@ router.get("/tenders/:id", async (req, res) => {
 		res.status(200).json({ resource: tender });
 	} catch (error) {
 		res.status(500).json({ code: "SERVER_ERROR" });
+	}
+});
+
+router.post("/tender/:tenderId/status", async (req, res) => {
+	const tenderId = parseInt(req.params.tenderId, 10);
+	const newStatus = req.body.status;
+	const buyerId = req.user.id;
+
+	if (!validTenderStatuses.includes(newStatus)) {
+		return res.status(400).send({ code: "INVALID_STATUS" });
+	}
+
+	let client;
+
+	try {
+		client = await pool.connect();
+
+		await client.query("BEGIN");
+
+		const tenderResult = await client.query(
+			"SELECT buyer_id, status FROM tender WHERE id = $1 AND buyer_id = $2",
+			[tenderId, buyerId]
+		);
+
+		if (tenderResult.rowCount === 0) {
+			await client.query("ROLLBACK");
+			return res.status(404).send({ code: "TENDER_NOT_FOUND" });
+		}
+
+		const tender = tenderResult.rows[0];
+		const currentStatus = tender.status;
+		const allowedTenderStatusTransitions = {
+			Active: ["In Review", "Cancelled"],
+			"In Review": ["Cancelled"],
+			Cancelled: [],
+			Awarded: [],
+		};
+
+		const allowedStatuses = allowedTenderStatusTransitions[currentStatus];
+
+		if (!allowedStatuses || !allowedStatuses.includes(newStatus)) {
+			await client.query("ROLLBACK");
+			return res.status(400).send({ code: "INVALID_STATUS_TRANSITION" });
+		}
+		const updateResult = await client.query(
+			"UPDATE tender SET status = $1 WHERE id = $2;",
+			[newStatus, tenderId]
+		);
+
+		if (updateResult.rowCount > 0) {
+			await client.query("COMMIT");
+			return res.status(200).send({ code: "SUCCESS" });
+		} else {
+			await client.query("ROLLBACK");
+			return res.status(500).send({ code: "SERVER_ERROR" });
+		}
+	} catch (error) {
+		if (client) {
+			await client.query("ROLLBACK");
+		}
+
+		return res.status(500).send({ code: "SERVER_ERROR" });
+	} finally {
+		if (client) {
+			client.release();
+		}
 	}
 });
 
