@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PublishTenderForm.css";
 import { get, post } from "./TenderClient";
 import "./styles.css";
@@ -14,6 +15,8 @@ const PublishTenderForm = () => {
 	const [skills, setSkills] = useState([]);
 	const [selectedSkills, setSelectedSkills] = useState([]);
 	const [errors, setErrors] = useState([]);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchSkills = async () => {
@@ -114,6 +117,7 @@ const PublishTenderForm = () => {
 				setSelectedSkills([]);
 				setErrors([]);
 				alert("Tender published successfully!");
+				navigate("/buyer-tender");
 			} catch (error) {
 				setErrors([error.message]);
 			}
