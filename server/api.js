@@ -478,7 +478,7 @@ router.get("/tenders/:id", async (req, res) => {
 
 	try {
 		const tenderResult = await db.query(
-			`SELECT id, title, creation_date, announcement_date, deadline, description, status, closing_date
+			`SELECT id, title, creation_date, announcement_date, deadline, description, status, last_update, no_of_bids_received, closing_date
              FROM tender WHERE id = $1`,
 			[tenderId]
 		);
@@ -489,9 +489,9 @@ router.get("/tenders/:id", async (req, res) => {
 
 		const bidsResult = await db.query(
 			`SELECT bid.bid_id, bid.tender_id, bid.bidding_amount, bid.status, bid.suggested_duration_days
-     FROM bid
-     JOIN tender ON bid.tender_id = tender.id
-     WHERE tender.id = $1`,
+			FROM bid
+			JOIN tender ON bid.tender_id = tender.id
+			WHERE tender.id = $1`,
 			[tenderId]
 		);
 

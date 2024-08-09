@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { get, post } from "./TenderClient";
 import "./BidList.css";
 
-const BuyerTenderList = () => {
-	const { pageNumber } = useParams();
-	const { tenderId } = useParams();
+const BidList = () => {
+	const { pageNumber, tenderId } = useParams();
 	const currentPage = pageNumber ? parseInt(pageNumber, 10) : 1;
 	const [bids, setBids] = useState([]);
+	const [tender, setTender] = useState(null);
 	const [updateStatus, setUpdatedStatus] = useState("");
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [statusError, setStatusError] = useState(null);
@@ -19,29 +19,35 @@ const BuyerTenderList = () => {
 		totalPages: 1,
 	});
 
-	const fetchBids = async (tenderId, page) => {
+	const fetchData = useCallback(async () => {
 		setLoading(true);
 		try {
-			const data = await get(`/api/bid?tender_id=${tenderId}&page=${page}`);
-			setBids(data.results);
-			setPagination(data.pagination);
+			const tenderData = await get(`/api/tenders/${tenderId}`);
+			setTender(tenderData.resource);
+
+			const bidsData = await get(
+				`/api/bid?tender_id=${tenderId}&page=${currentPage}`
+			);
+			setBids(bidsData.results);
+			setPagination(bidsData.pagination);
+
 			setErrorMsg(null);
 		} catch (error) {
-			setErrorMsg("Error fetching bids!");
+			setErrorMsg("Error fetching data!");
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [tenderId, currentPage]);
 
 	useEffect(() => {
-		fetchBids(tenderId, currentPage);
-	}, [currentPage, tenderId]);
+		fetchData();
+	}, [fetchData]);
 
 	const handleBidStatusChange = async (bidId, status) => {
 		try {
 			await post(`/api/bid/${bidId}/status`, { status });
 			setUpdatedStatus(`Updated the status for bid id ${bidId} to ${status}!`);
-			fetchBids(tenderId, currentPage);
+			await fetchData();
 		} catch (error) {
 			setStatusError("An error occurred while updating bid status!");
 		}
@@ -86,7 +92,6 @@ const BuyerTenderList = () => {
 	if (errorMsg) {
 		return <div className="msg">{errorMsg}</div>;
 	}
-
 	if (loading) {
 		return <div className="msg">Loading...</div>;
 	}
@@ -96,7 +101,42 @@ const BuyerTenderList = () => {
 
 	return (
 		<main className=".main">
-			{updateStatus && <div className="message">{updateStatus}</div>}
+			<h2 className="heading">Tender Details</h2>
+			<div className="container">
+				{updateStatus && <div className="message">{updateStatus}</div>}
+				<div className="card">
+					<span className="posted-on-date">
+						{" "}
+						Posted on: {new Date(tender.creation_date).toLocaleDateString()}
+					</span>
+					<span data-status={tender.status}>{tender.status}</span>
+					<h2>{`Tender ID: ${tender.id} - Tender Title: ${tender.title}`}</h2>
+					<div className="flex">
+						<p>
+							<strong>Closing Date: </strong>
+							{new Date(tender.closing_date).toLocaleDateString()}
+						</p>
+						<p>
+							<strong>Announcement Date: </strong>
+							{new Date(tender.announcement_date).toLocaleDateString()}
+						</p>
+						<p>
+							<strong>Project Deadline Date: </strong>
+							{new Date(tender.deadline).toLocaleDateString()}
+						</p>
+					</div>
+					<h3>Description: </h3>
+					<p className="cover-letter">{tender.description}</p>
+					<p>
+						<strong>Number of Bids: </strong>
+						{tender.no_of_bids_received}
+					</p>
+					<p className="last-update right">
+						<strong>Last Update: </strong>
+						{new Date(tender.last_update).toLocaleString()}
+					</p>
+				</div>
+			</div>
 			<h2 className="heading">Bids</h2>
 			<div className="container">
 				{bids.length === 0 ? (
@@ -109,7 +149,9 @@ const BuyerTenderList = () => {
 								<span className="posted-on-date">
 									{new Date(bid.bidding_date).toLocaleDateString()}
 								</span>
-								<span className="bid-status">{bid.status}</span>
+								<span data-status={bid.status} className="bid-status">
+									{bid.status}
+								</span>
 							</p>
 							<p className="title">
 								<strong>Bidder Id:</strong> {bid.bidder_id} |{" "}
@@ -165,4 +207,4 @@ const BuyerTenderList = () => {
 	);
 };
 
-export default BuyerTenderList;
+export default BidList;
