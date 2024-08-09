@@ -48,9 +48,22 @@ const BuyerTenderList = () => {
 	};
 
 	const handleRejectBid = async (bidId) => {
+		const confirmation = window.confirm(
+			"Are you sure you want to Reject this bid ?"
+		);
+		if (!confirmation) {
+			return;
+		}
 		await handleBidStatusChange(bidId, "Rejected");
 	};
+
 	const handleAcceptBid = async (bidId) => {
+		const confirmation = window.confirm(
+			"Are you sure you want to Award this bid ?"
+		);
+		if (!confirmation) {
+			return;
+		}
 		await handleBidStatusChange(bidId, "Awarded");
 	};
 
