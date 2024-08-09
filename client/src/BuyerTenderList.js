@@ -138,11 +138,8 @@ const BuyerTenderList = () => {
 								)}
 							</p>
 							<p>
-								<strong>Cost: </strong>£{tender.cost}{" "}
-								<span>
-									<strong>No. Of Bids Received: </strong>
-									{tender.no_of_bids_received}
-								</span>
+								<strong>No. Of Bids Received: </strong>
+								{tender.no_of_bids_received}
 							</p>
 						</div>
 					))
