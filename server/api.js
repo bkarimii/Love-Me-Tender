@@ -748,6 +748,13 @@ router.post("/bid", async (req, res) => {
 
 			const bidResult = await client.query(bidQuery, bidValues);
 
+			const updateTenderQuery = `
+				UPDATE tender
+				SET no_of_bids_received = no_of_bids_received + 1
+				WHERE id = $1
+			`;
+			await client.query(updateTenderQuery, [tenderId]);
+
 			await client.query("COMMIT");
 
 			res.status(201).json({
