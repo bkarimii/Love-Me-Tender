@@ -49,7 +49,9 @@ const Header = () => {
 
 	return (
 		<header className="header">
-			<img className="logo" src={Logo} alt="Code Your Future logo" />
+			<a href="/">
+				<img className="logo" src={Logo} alt="Code Your Future logo" />
+			</a>
 			{role != null && (
 				<nav className="nav-list">
 					{role === "admin" && (
