@@ -242,6 +242,8 @@ router.post("/tender", async (req, res) => {
 		selectedSkills,
 	} = req.body;
 
+	const buyerId = req.user.id;
+
 	const newErrors = [];
 
 	if (!title || title.length < 10 || title.length > 50) {
@@ -284,8 +286,8 @@ router.post("/tender", async (req, res) => {
 		await client.query("BEGIN");
 
 		const insertTenderQuery = `
-		INSERT INTO tender (title, announcement_date, deadline, description, closing_date, status)
-		VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
+		INSERT INTO tender (title, announcement_date, deadline, description, closing_date, status,  buyer_id, creation_date, last_update, no_of_bids_received)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_DATE, now(), $8) RETURNING id
 		`;
 		const tenderResult = await client.query(insertTenderQuery, [
 			title,
@@ -294,6 +296,8 @@ router.post("/tender", async (req, res) => {
 			description,
 			closingDate,
 			"Active",
+			buyerId,
+			0,
 		]);
 		const tenderId = tenderResult.rows[0].id;
 
