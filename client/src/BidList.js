@@ -101,12 +101,19 @@ const BuyerTenderList = () => {
 							<p className="title">
 								<strong>Bidder Id:</strong> {bid.bidder_id} |{" "}
 								<strong>Bidder Name: </strong>
-								{bid.first_name + " " + bid.last_name} |{" "}
-								<strong>Proposed Project Duration: </strong>
-								{bid.suggested_duration_days} days
+								{bid.first_name + " " + bid.last_name}
 							</p>
-							<h4>Cover letter:</h4>
-							<p className="cover-letter"> {bid.cover_letter}</p>
+							<p>
+								<strong>Proposed Project Duration: </strong>
+								{bid.suggested_duration_days} days |{" "}
+								<strong>Proposed Project Budget: </strong>£ {bid.bidding_amount}
+							</p>
+							{bid.cover_letter && (
+								<div>
+									<h4>Cover letter:</h4>
+									<p className="cover-letter"> {bid.cover_letter}</p>
+								</div>
+							)}
 							<div className="btn-container">
 								{bid.status !== "Rejected" && bid.status !== "Awarded" && (
 									<>

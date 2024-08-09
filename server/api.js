@@ -532,11 +532,10 @@ router.get("/bid", async (req, res) => {
 			`;
 			totalBidsParams = [userId, tenderID];
 			bidsQuery = `
-SELECT bid.*, bidder.first_name, bidder.last_name, ba.attachment
+				SELECT bid.*, bidder.first_name, bidder.last_name
 				FROM bid
 				JOIN bidder ON bid.bidder_id = bidder.user_id
 				JOIN tender ON bid.tender_id = tender.id
-				JOIN bid_attachment as ba ON bid.bid_id = ba.bid_id
 				WHERE tender.buyer_id = $1
   				AND bid.tender_id = $2
 				LIMIT $3 OFFSET $4;
