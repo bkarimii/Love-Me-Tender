@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import ProtectedRoute from "./ProtectedRoute";
 import BidList from "./BidList";
 import SubmitBidForm from "./SubmitBidForm";
+import BidDetail from "./BidDetail";
 
 const App = () => (
 	<>
@@ -35,6 +36,7 @@ const App = () => (
 			<Route path="/dashboard" element={<Dashboard />} />
 			<Route path="/dashboard/page/:pageNumber" element={<TendersList />} />
 			<Route path="/bidding/:tenderId" element={<BidList />} />
+			<Route path="/bid-detail/:bidId" element={<BidDetail />} />
 			<Route path="/tenders/:tenderId/submit-bid" element={<SubmitBidForm />} />
 		</Routes>
 		<Footer className="footer" />
