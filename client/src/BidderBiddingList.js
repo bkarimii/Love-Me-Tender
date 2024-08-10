@@ -48,14 +48,12 @@ const BidderBiddingList = () => {
 				}
 			}
 
+			await post(`/api/bid/${bidId}/status`, { status: newStatus });
 			setBids((prevList) =>
 				prevList.map((bid) =>
 					bid.bid_id === bidId ? { ...bid, status: newStatus } : bid
 				)
 			);
-
-			await post(`/api/bid/${bidId}/status`, { status: newStatus });
-			fetchBids();
 		} catch (error) {
 			setErrorMsg("Server Error");
 		}
@@ -113,13 +111,15 @@ const BidderBiddingList = () => {
 									{bid.suggested_duration_days} days
 								</span>
 							</p>
-							{bid.status !== "Withdrawn" && (
+							{bid.status !== "Withdrawn" ? (
 								<button
 									className="btn withdraw-btn"
 									onClick={() => handleStatusChange(bid.bid_id, "Withdrawn")}
 								>
 									Withdraw
 								</button>
+							) : (
+								<p className="withdrawn-text">Withdrawn</p>
 							)}
 						</div>
 					))
